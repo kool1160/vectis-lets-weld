@@ -20,7 +20,7 @@ Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe
 | V2-M4 | Test Coupon Linkage From Baseline Range | CREATED |
 | V2-M5 | Tested Result History Structure | CREATED |
 | V2-M6 | Locked Recipe Promotion Gate | CREATED |
-| V2-M7 | Baseline Search / Filter View | NOT STARTED |
+| V2-M7 | Baseline Search / Filter View | CREATED |
 | V2-M8 | Print / Export Reference Sheet Structure | NOT STARTED |
 | V2-M9 | V2 Data-Control QA Review | NOT STARTED |
 | V2-M10 | V2 Closeout / Source of Truth | NOT STARTED |
