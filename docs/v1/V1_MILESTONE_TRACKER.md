@@ -13,7 +13,7 @@ AI-Weld Settings Library / Vectis Weld Recipe Control
 | V1-M3 | Weave Settings Module | CREATED |
 | V1-M4 | Baseline Settings Table | CREATED |
 | V1-M5 | Test Coupon Entry Screen | CREATED |
-| V1-M6 | Recipe Approval / Locking Rules | NOT STARTED |
+| V1-M6 | Recipe Approval / Locking Rules | CREATED |
 | V1-M7 | Production Recipe Sheet Output | NOT STARTED |
 | V1-M8 | Search / Filter / History | NOT STARTED |
 | V1-M9 | Mild Steel Starter Data | NOT STARTED |
