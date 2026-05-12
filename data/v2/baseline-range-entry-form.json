@@ -1,0 +1,144 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V2",
+  "milestone": "V2-M3 — Baseline Range Entry Form Structure",
+  "purpose": "Create a safe entry form structure for mild steel baseline high/low ranges without treating entries as approved, locked, recommended, or production-ready recipes.",
+  "locked_context": {
+    "v1_status": "complete_closed",
+    "v2_m1_status": "locked_passed",
+    "v2_m2_status": "locked_passed",
+    "core_rule": "Baseline range = starting reference only. Tested result = what actually happened. Locked recipe = approved production record.",
+    "required_control_path": "Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe"
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "machine_scope": "Vectis cobot",
+    "welder_scope": "Miller 352 MPa",
+    "entry_form_structure_only": true,
+    "large_weld_data_dump_allowed": false,
+    "real_weld_ranges_allowed": false,
+    "recommendation_logic": false,
+    "ranking_allowed": false,
+    "production_ready_claims_allowed": false,
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"]
+  },
+  "required_defaults": {
+    "baseline_status": "REFERENCE_ONLY",
+    "confidence_level": "REFERENCE_ONLY",
+    "requiresTestCoupon": true,
+    "approval_status": "not_approved",
+    "production_ready": false,
+    "linked_test_coupon_id": null,
+    "linked_locked_recipe_id": null
+  },
+  "form_field_groups": {
+    "material_thickness": [
+      "material",
+      "thickness",
+      "gauge"
+    ],
+    "joint_weld_type": [
+      "joint_type",
+      "weld_size",
+      "weld_position"
+    ],
+    "wire_gas_mode": [
+      "wire_type",
+      "wire_diameter",
+      "gas",
+      "mode"
+    ],
+    "cv_setting_ranges": [
+      "wfs_low",
+      "wfs_high",
+      "voltage_low",
+      "voltage_high"
+    ],
+    "pulse_setting_ranges": [
+      "wfs_low",
+      "wfs_high",
+      "trim_or_arc_length_low",
+      "trim_or_arc_length_high"
+    ],
+    "travel_motion_ranges": [
+      "travel_speed_low",
+      "travel_speed_high"
+    ],
+    "weave_ranges": [
+      "weave_type",
+      "weave_parameter_range",
+      "weave_width_low",
+      "weave_width_high",
+      "weave_dwell_low",
+      "weave_dwell_high"
+    ],
+    "ctwd_torch_angle_ranges": [
+      "ctwd_low",
+      "ctwd_high",
+      "torch_work_angle_range",
+      "push_pull_angle_range"
+    ],
+    "source_confidence_fields": [
+      "source_label",
+      "source_name",
+      "source_type",
+      "source_notes",
+      "captured_from",
+      "captured_by",
+      "captured_date",
+      "confidence_level"
+    ],
+    "control_traceability_fields": [
+      "baseline_range_id",
+      "baseline_status",
+      "requiresTestCoupon",
+      "approval_status",
+      "production_ready",
+      "linked_test_coupon_id",
+      "linked_locked_recipe_id"
+    ],
+    "notes": [
+      "notes"
+    ]
+  },
+  "entry_rules": {
+    "mode_required": true,
+    "allowed_modes": ["CV", "Pulse"],
+    "cv_rows_use": ["voltage_low", "voltage_high"],
+    "pulse_rows_use": ["trim_or_arc_length_low", "trim_or_arc_length_high"],
+    "source_label_required": true,
+    "confidence_level_required": true,
+    "requires_test_coupon_required": true,
+    "baseline_form_can_approve": false,
+    "baseline_form_can_lock": false,
+    "baseline_form_can_mark_production_ready": false
+  },
+  "allowed_source_labels": [
+    "MILLER_MACHINE_REFERENCE",
+    "VECTIS_MANUAL_GUARDRAIL",
+    "SHOP_SCREENSHOT_REFERENCE",
+    "SHOP_REFERENCE",
+    "PUBLIC_REFERENCE"
+  ],
+  "allowed_confidence_levels_for_baseline_entry": [
+    "REFERENCE_ONLY",
+    "SHOP_REFERENCE",
+    "SHOP_SCREENSHOT_REFERENCE"
+  ],
+  "disallowed_baseline_entry_labels": [
+    "TESTED_RESULT",
+    "LOCKED_RECIPE",
+    "TEST_COUPON_RESULT",
+    "LOCKED_RECIPE_RECORD"
+  ],
+  "reference_only_safety_language": "Submitted baseline ranges are starting reference data only. They remain untested until converted into a test coupon, tested, recorded, approved, and intentionally locked as a separate locked recipe record.",
+  "submission_result": {
+    "created_record_type": "baseline_range_reference",
+    "created_status": "REFERENCE_ONLY",
+    "creates_test_coupon": false,
+    "creates_locked_recipe": false,
+    "requires_next_step": "Create linked test coupon before approval or lock can be considered."
+  }
+}
