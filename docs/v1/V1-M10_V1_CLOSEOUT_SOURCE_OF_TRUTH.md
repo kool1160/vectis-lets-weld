@@ -11,6 +11,23 @@ Create the official V1 closeout/source-of-truth record for the AI-Weld Settings 
 
 This document preserves the completed V1 scope, workflow, data/control structures, app shell status, exclusions, and future V2 direction.
 
+## Supplemental Data-Control Corrections
+
+V1 includes supplemental documentation/data-control corrections that do not reopen or renumber the completed V1 milestone chain.
+
+Reference:
+
+- `V1-DOC-R1_SUPPLEMENTAL_DATA_MODEL_REFERENCE.md`
+- `V1-DOC-R2_BASELINE_TESTED_LOCKED_DATA_SEPARATION_CORRECTION.md`
+
+V1-DOC-R2 is the controlling correction for separating baseline reference data, shop reference data, tested results, and locked production recipes.
+
+Corrected core model:
+
+Baseline → Test → Record Result → Learn → Lock Better Settings
+
+Miller data, Vectis manual guidance, public data, and shop screenshots/settings must remain reference data until tested and approved.
+
 ## Final V1 Scope Summary
 
 ### Machine Scope
@@ -46,6 +63,10 @@ The locked control path is:
 
 Baseline → Test Coupon → Approval Record → Locked Recipe
 
+Corrected data-confidence path:
+
+Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe
+
 ## Final Completed Milestone List
 
 | Milestone | Name | Final V1 Status |
@@ -70,6 +91,28 @@ Baseline settings are starting reference records.
 They are not production-ready.
 
 They cannot become locked recipes directly.
+
+All baseline rows must remain labeled reference-only until tested.
+
+Baseline rows may include high/low ranges, but those ranges are testing references only, not approved windows.
+
+### Data Confidence Levels
+
+V1 recognizes the following confidence levels:
+
+- REFERENCE_ONLY
+- SHOP_REFERENCE
+- SHOP_SCREENSHOT_REFERENCE
+- TESTED_RESULT
+- LOCKED_RECIPE
+
+### Source Separation
+
+- Miller data = machine-side arc baseline
+- Vectis manual = cobot/weave/process guardrails
+- Shop screenshots/settings = shop reference data
+- Test coupon results = tested data
+- Approved production use = locked recipe data
 
 ### Test Coupons
 
@@ -156,6 +199,7 @@ V1 does not include:
 - Auto-locking recipes
 - Untested production recipes
 - Material/process expansion beyond mild steel MIG / Pulse MIG
+- Proven production settings created from Miller, Vectis, public, or screenshot reference data
 
 ## Final V1 Control Rules
 
@@ -171,6 +215,10 @@ V1 does not include:
 - No baseline row may become a locked recipe directly
 - No test coupon may become a locked recipe automatically
 - No production recipe may be locked without test result approval
+- Miller data must remain machine-side arc baseline until tested
+- Vectis manual guidance must remain cobot/weave/process guardrail guidance until tested
+- Shop screenshots/settings must remain shop reference data until tested
+- Arc Seam Tracking / ArcPilot is optional and defaults to not installed / not active unless confirmed otherwise
 
 ## V2 Backlog / Future Direction
 
@@ -186,6 +234,8 @@ V2 may consider:
 - Print-friendly locked recipe sheets
 - Additional tested mild steel recipe records after validation
 - Expanded app polish after V1 closeout
+- Larger baseline/reference sheet with strict data-confidence labels
+- Source type filtering for Miller / Vectis / shop screenshot / tested / locked records
 
 V2 must not automatically add stainless, aluminum, flux-core, metal-core, or recommendation logic unless explicitly approved as a future scoped version.
 
@@ -194,5 +244,7 @@ V2 must not automatically add stainless, aluminum, flux-core, metal-core, or rec
 V1 is documentation/data/control-structure complete.
 
 V1 is only officially complete after Testing passes V1-M10.
+
+Supplemental docs V1-DOC-R1 and V1-DOC-R2 preserve and clarify V1 without reopening V1.
 
 After V1-M10 Testing passes, V1 should be treated as closed unless Planning intentionally opens a controlled V2 milestone.
