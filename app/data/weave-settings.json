@@ -1,0 +1,36 @@
+{
+  "weaveTypes": [
+    {
+      "name": "No Weave",
+      "description": "Straight stringer path with no side-to-side motion.",
+      "simpleMeaning": "Straight ahead",
+      "parameters": []
+    },
+    {
+      "name": "Zig-Zag",
+      "description": "Side-to-side weave pattern across the joint.",
+      "simpleMeaning": "Side to side",
+      "parameters": [
+        "weaveLength",
+        "weaveWidth",
+        "dwellLeft",
+        "dwellRight",
+        "coolTime",
+        "fillTime"
+      ]
+    },
+    {
+      "name": "InLine",
+      "description": "Forward/back stepping pattern along the weld path.",
+      "simpleMeaning": "Forward/back stepping",
+      "parameters": [
+        "forwardStep",
+        "backStep",
+        "backStepPause",
+        "coolTime",
+        "fillTime"
+      ]
+    }
+  ],
+  "operatorNote": "Weave should be treated as a controlled setting. First check travel speed, wirefeed, trim, torch angle, and fit-up before changing weave values."
+}
