@@ -1,0 +1,123 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V2",
+  "milestone": "V2-M1 — Mild Steel Baseline Range Table Structure",
+  "purpose": "Create a safe data structure for holding mild steel baseline high/low weld setting ranges by weld type without creating proven production recipes.",
+  "v1_context": {
+    "v1_status": "complete_closed",
+    "carry_forward_rule": "Baseline range = starting reference only. Tested result = what actually happened. Locked recipe = approved production record.",
+    "required_control_path": "Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe"
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "machine_scope": "Vectis cobot",
+    "welder_scope": "Miller 352 MPa",
+    "baseline_range_table_structure_only": true,
+    "large_weld_data_dump_allowed": false,
+    "recommendation_logic": false,
+    "production_ready_claims_allowed": false,
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"]
+  },
+  "required_fields": [
+    "baseline_range_id",
+    "material",
+    "thickness",
+    "gauge",
+    "joint_type",
+    "weld_size",
+    "weld_position",
+    "wire_type",
+    "wire_diameter",
+    "gas",
+    "mode",
+    "wfs_low",
+    "wfs_high",
+    "voltage_low",
+    "voltage_high",
+    "trim_or_arc_length_low",
+    "trim_or_arc_length_high",
+    "travel_speed_low",
+    "travel_speed_high",
+    "weave_type",
+    "weave_parameter_range",
+    "ctwd_low",
+    "ctwd_high",
+    "torch_work_angle_range",
+    "push_pull_angle_range",
+    "source_type",
+    "confidence_level",
+    "requiresTestCoupon",
+    "baseline_status",
+    "linked_test_coupon_id",
+    "linked_locked_recipe_id",
+    "notes"
+  ],
+  "required_defaults": {
+    "baseline_status": "REFERENCE_ONLY",
+    "requiresTestCoupon": true,
+    "linked_test_coupon_id": null,
+    "linked_locked_recipe_id": null
+  },
+  "separation_rules": {
+    "separate_from_tested_result_history": true,
+    "separate_from_locked_production_recipes": true,
+    "separate_from_rejected_settings": true,
+    "separate_from_superseded_settings": true,
+    "rule": "Baseline range rows are reference-only structures and must not be stored as tested results, locked recipes, rejected settings, or superseded settings."
+  },
+  "allowed_source_types": [
+    "miller_machine_baseline",
+    "vectis_manual_guardrail",
+    "public_reference",
+    "shop_reference",
+    "shop_screenshot_reference",
+    "mixed_reference"
+  ],
+  "allowed_confidence_levels_for_baseline_ranges": [
+    "REFERENCE_ONLY",
+    "SHOP_REFERENCE",
+    "SHOP_SCREENSHOT_REFERENCE"
+  ],
+  "disallowed_confidence_levels_for_baseline_ranges": [
+    "TESTED_RESULT",
+    "LOCKED_RECIPE"
+  ],
+  "baseline_range_rows": [
+    {
+      "baseline_range_id": "EXAMPLE-MS-BR-001",
+      "material": "Mild steel",
+      "thickness": "Example only — to be defined later",
+      "gauge": "Example only — to be defined later",
+      "joint_type": "Example only — to be defined later",
+      "weld_size": "Example only — to be defined later",
+      "weld_position": "Example only — to be defined later",
+      "wire_type": "ER70S-6",
+      "wire_diameter": "Example only — .035 or .045",
+      "gas": "Shop-used mild steel gas only",
+      "mode": "Example only — MIG or Pulse MIG",
+      "wfs_low": "Example structure only — no real value",
+      "wfs_high": "Example structure only — no real value",
+      "voltage_low": "Example structure only — no real value",
+      "voltage_high": "Example structure only — no real value",
+      "trim_or_arc_length_low": "Example structure only — no real value",
+      "trim_or_arc_length_high": "Example structure only — no real value",
+      "travel_speed_low": "Example structure only — no real value",
+      "travel_speed_high": "Example structure only — no real value",
+      "weave_type": "Example only — No Weave / Zig-Zag / Sine / InLine",
+      "weave_parameter_range": "Example structure only — no real value",
+      "ctwd_low": "Example structure only — no real value",
+      "ctwd_high": "Example structure only — no real value",
+      "torch_work_angle_range": "Example structure only — no real value",
+      "push_pull_angle_range": "Example structure only — no real value",
+      "source_type": "mixed_reference",
+      "confidence_level": "REFERENCE_ONLY",
+      "requiresTestCoupon": true,
+      "baseline_status": "REFERENCE_ONLY",
+      "linked_test_coupon_id": null,
+      "linked_locked_recipe_id": null,
+      "notes": "Example structure row only. Not approved, not locked, not ideal, not proven, and not production-ready."
+    }
+  ]
+}
