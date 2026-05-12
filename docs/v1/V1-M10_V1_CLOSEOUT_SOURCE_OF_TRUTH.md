@@ -19,14 +19,19 @@ Reference:
 
 - `V1-DOC-R1_SUPPLEMENTAL_DATA_MODEL_REFERENCE.md`
 - `V1-DOC-R2_BASELINE_TESTED_LOCKED_DATA_SEPARATION_CORRECTION.md`
+- `V1-DOC-R3_BASELINE_RANGE_EXPANSION_GUARDRAIL.md`
 
 V1-DOC-R2 is the controlling correction for separating baseline reference data, shop reference data, tested results, and locked production recipes.
+
+V1-DOC-R3 is the controlling guardrail for any future mild steel baseline high/low range expansion.
 
 Corrected core model:
 
 Baseline → Test → Record Result → Learn → Lock Better Settings
 
 Miller data, Vectis manual guidance, public data, and shop screenshots/settings must remain reference data until tested and approved.
+
+Baseline range rows must remain starting reference only and must not be treated as approved, locked, ideal, best, or production-ready.
 
 ## Final V1 Scope Summary
 
@@ -95,6 +100,20 @@ They cannot become locked recipes directly.
 All baseline rows must remain labeled reference-only until tested.
 
 Baseline rows may include high/low ranges, but those ranges are testing references only, not approved windows.
+
+### Baseline Range Expansion Guardrail
+
+Future baseline range rows must follow V1-DOC-R3.
+
+Baseline range = starting reference only.
+
+Tested result = what actually happened.
+
+Locked recipe = approved production record.
+
+Recommendation logic is not allowed until enough tested history exists.
+
+Every future baseline range row must include source labels, confidence labels, `requiresTestCoupon: true`, `production_ready: false`, and `locked_recipe_id: null`.
 
 ### Data Confidence Levels
 
@@ -200,6 +219,7 @@ V1 does not include:
 - Untested production recipes
 - Material/process expansion beyond mild steel MIG / Pulse MIG
 - Proven production settings created from Miller, Vectis, public, or screenshot reference data
+- Approved high/low baseline range windows without testing
 
 ## Final V1 Control Rules
 
@@ -219,6 +239,7 @@ V1 does not include:
 - Vectis manual guidance must remain cobot/weave/process guardrail guidance until tested
 - Shop screenshots/settings must remain shop reference data until tested
 - Arc Seam Tracking / ArcPilot is optional and defaults to not installed / not active unless confirmed otherwise
+- Future baseline range rows must remain reference-only until tested and approved
 
 ## V2 Backlog / Future Direction
 
@@ -236,6 +257,7 @@ V2 may consider:
 - Expanded app polish after V1 closeout
 - Larger baseline/reference sheet with strict data-confidence labels
 - Source type filtering for Miller / Vectis / shop screenshot / tested / locked records
+- Real mild steel thickness/joint baseline ranges following V1-DOC-R3 guardrails
 
 V2 must not automatically add stainless, aluminum, flux-core, metal-core, or recommendation logic unless explicitly approved as a future scoped version.
 
@@ -245,6 +267,6 @@ V1 is documentation/data/control-structure complete.
 
 V1 is only officially complete after Testing passes V1-M10.
 
-Supplemental docs V1-DOC-R1 and V1-DOC-R2 preserve and clarify V1 without reopening V1.
+Supplemental docs V1-DOC-R1, V1-DOC-R2, and V1-DOC-R3 preserve and clarify V1 without reopening V1.
 
 After V1-M10 Testing passes, V1 should be treated as closed unless Planning intentionally opens a controlled V2 milestone.
