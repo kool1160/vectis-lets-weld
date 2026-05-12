@@ -1,0 +1,160 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V1",
+  "milestone": "V1-M8 — Search / Filter / History",
+  "purpose": "Provide search, filter, and history structure for finding baseline settings, test coupons, approval records, and locked recipes without creating recommendation logic.",
+  "machine_scope": {
+    "cobot": "Vectis cobot",
+    "welder": "Miller 352 MPa"
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "allowed_wire": [".035 ER70S-6", ".045 ER70S-6"],
+    "allowed_gas": "Shop-used mild steel gas only",
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"],
+    "recommendation_logic": false,
+    "recipe_ranking_allowed": false,
+    "auto_select_production_settings": false,
+    "workflow": "Collect → Test → Approve → Lock → Reuse"
+  },
+  "required_filters": [
+    "material",
+    "thickness",
+    "joint_type",
+    "weld_position",
+    "process",
+    "wire_diameter",
+    "wire_type",
+    "gas",
+    "weave_pattern",
+    "test_status",
+    "approval_status",
+    "production_ready",
+    "active_status",
+    "revision",
+    "date_created",
+    "date_tested",
+    "date_locked"
+  ],
+  "search_models": {
+    "baseline_settings": {
+      "record_type": "baseline_setting",
+      "searchable_fields": [
+        "baseline_id",
+        "material",
+        "thickness",
+        "joint_type",
+        "weld_position",
+        "process",
+        "wire_diameter",
+        "wire_type",
+        "gas",
+        "weave_pattern",
+        "test_status",
+        "approval_status",
+        "revision",
+        "date_created"
+      ],
+      "result_behavior": "Find baseline reference records only. Do not present as production-ready recipes."
+    },
+    "test_coupons": {
+      "record_type": "test_coupon",
+      "searchable_fields": [
+        "test_coupon_id",
+        "baseline_id",
+        "material",
+        "thickness",
+        "joint_type",
+        "weld_position",
+        "process",
+        "wire_diameter",
+        "wire_type",
+        "gas",
+        "weave_pattern",
+        "test_status",
+        "approval_status",
+        "revision",
+        "date_tested"
+      ],
+      "result_behavior": "Find test coupon records and test results. Do not convert test coupons into locked recipes automatically."
+    },
+    "approval_records": {
+      "record_type": "approval_record",
+      "searchable_fields": [
+        "approval_record_id",
+        "baseline_id",
+        "test_coupon_id",
+        "locked_recipe_id",
+        "material",
+        "process",
+        "test_status",
+        "approval_status",
+        "production_ready",
+        "revision",
+        "date_created"
+      ],
+      "result_behavior": "Find approval and rejection/retest records for traceability. Do not treat approval search as recommendation logic."
+    },
+    "locked_recipes": {
+      "record_type": "locked_recipe",
+      "searchable_fields": [
+        "locked_recipe_id",
+        "recipe_name",
+        "baseline_id",
+        "test_coupon_id",
+        "approval_record_id",
+        "material",
+        "thickness",
+        "joint_type",
+        "weld_position",
+        "process",
+        "wire_diameter",
+        "wire_type",
+        "gas",
+        "weave_pattern",
+        "production_ready",
+        "active_status",
+        "revision",
+        "date_locked"
+      ],
+      "result_behavior": "Find reusable locked production records only after approval and locking. Do not rank recipes as best, better, or worse."
+    }
+  },
+  "required_history_fields": [
+    "history_id",
+    "record_type",
+    "record_id",
+    "action_type",
+    "changed_by",
+    "change_date",
+    "previous_status",
+    "new_status",
+    "revision",
+    "notes"
+  ],
+  "history_controls": {
+    "supported_record_types": [
+      "baseline_setting",
+      "test_coupon",
+      "approval_record",
+      "locked_recipe"
+    ],
+    "supported_action_types": [
+      "created",
+      "updated",
+      "tested",
+      "approved",
+      "rejected",
+      "retest_required",
+      "locked",
+      "revision_created",
+      "deactivated",
+      "reactivated"
+    ],
+    "traceability_rule": "History entries must identify the record_type and record_id so changes can be traced across baseline, test coupon, approval, and locked recipe records.",
+    "recommendation_rule": "History and search are for finding and auditing records only. They must not rank, recommend, or auto-select settings."
+  },
+  "history_records": []
+}
