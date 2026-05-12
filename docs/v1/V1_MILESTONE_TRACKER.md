@@ -17,7 +17,10 @@ AI-Weld Settings Library / Vectis Weld Recipe Control
 | V1-M7 | Locked Recipe Library Structure | CREATED |
 | V1-M8 | Search / Filter / History | CREATED |
 | V1-M9 | Mild Steel Starter Data | CREATED |
-| V1-M10 | V1 Closeout / Source of Truth | NOT STARTED |
+| V1-M10 | V1 Closeout / Source of Truth | CREATED / READY FOR TESTING |
 
 ## V1 Locked Rule
 Mild steel only. Vectis only. Miller 352 MPa only. Collect first. Test second. Lock third. Recommend later.
+
+## V1 Completion Gate
+V1 is officially complete only after Testing passes V1-M10.
