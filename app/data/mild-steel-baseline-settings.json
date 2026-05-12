@@ -1,0 +1,31 @@
+{
+  "version": "V1",
+  "scope": "Mild steel baseline reference settings only",
+  "status": "REFERENCE_ONLY",
+  "note": "Baseline settings are starting points only. Production recipes require test approval before lock.",
+  "allowedMaterial": "Mild Steel",
+  "allowedProcesses": ["MIG", "Pulse MIG"],
+  "allowedWire": [".035 ER70S-6", ".045 ER70S-6"],
+  "allowedGas": ["Shop-used mild steel gas only"],
+  "thicknessGroups": [
+    "14 ga",
+    "12 ga",
+    "11 ga",
+    "10 ga",
+    "1/8 in",
+    "3/16 in",
+    "1/4 in",
+    "5/16 in",
+    "3/8 in",
+    "1/2 in"
+  ],
+  "jointTypes": [
+    "Fillet",
+    "Lap",
+    "Butt",
+    "Outside Corner",
+    "Tube-to-Plate",
+    "Tube-to-Tube"
+  ],
+  "records": []
+}
