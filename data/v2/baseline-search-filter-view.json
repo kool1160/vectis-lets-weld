@@ -1,0 +1,105 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V2",
+  "milestone": "V2-M7 — Baseline Search / Filter View",
+  "purpose": "Create the V2 baseline search/filter view structure so users can find mild steel baseline range records without treating them as recommendations or locked recipes.",
+  "locked_context": {
+    "v1_status": "complete_closed",
+    "v2_m1_through_m6_status": "locked_passed",
+    "baseline_range_rule": "Baseline ranges remain reference-only.",
+    "locked_recipe_rule": "Locked recipes require tested result, approval, and lock authorization.",
+    "core_rule": "Baseline range = starting reference only. Tested result = what actually happened. Locked recipe = approved production record."
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "machine_scope": "Vectis cobot",
+    "welder_scope": "Miller 352 MPa",
+    "search_filter_view_structure_only": true,
+    "recommendation_logic": false,
+    "ranking_allowed": false,
+    "auto_select_best_settings_allowed": false,
+    "production_ready_baseline_claims_allowed": false,
+    "real_baseline_range_data_allowed": false,
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"]
+  },
+  "required_filters": [
+    "material",
+    "thickness",
+    "gauge",
+    "joint_type",
+    "weld_position",
+    "wire_diameter",
+    "wire_type",
+    "gas",
+    "mode",
+    "weave_type",
+    "source_label",
+    "confidence_level",
+    "baseline_status",
+    "requiresTestCoupon"
+  ],
+  "required_visible_fields": [
+    "baseline_range_id",
+    "material",
+    "thickness",
+    "gauge",
+    "joint_type",
+    "weld_position",
+    "wire_type",
+    "wire_diameter",
+    "gas",
+    "mode",
+    "wfs_low",
+    "wfs_high",
+    "voltage_low",
+    "voltage_high",
+    "trim_or_arc_length_low",
+    "trim_or_arc_length_high",
+    "travel_speed_low",
+    "travel_speed_high",
+    "weave_type",
+    "source_label",
+    "confidence_level",
+    "baseline_status",
+    "requiresTestCoupon"
+  ],
+  "required_safety_labels": [
+    "REFERENCE_ONLY",
+    "Requires Test Coupon",
+    "Not Approved",
+    "Not Production Ready",
+    "Not Locked Recipe"
+  ],
+  "empty_state_behavior": {
+    "no_records_message": "No baseline range reference records found for the selected filters.",
+    "no_records_guidance": "Adjust filters or add a new reference-only baseline range entry.",
+    "must_not_suggest_best_match": true,
+    "must_not_recommend_settings": true
+  },
+  "actions": {
+    "create_test_coupon": {
+      "type": "placeholder_only",
+      "label": "Create Test Coupon",
+      "enabled_when": "baseline_range_id exists and requiresTestCoupon is true",
+      "result": "Starts linked test coupon workflow in a future milestone. Does not approve, lock, or mark production-ready."
+    }
+  },
+  "view_rules": {
+    "search_filter_can_recommend_settings": false,
+    "search_filter_can_rank_settings": false,
+    "search_filter_can_auto_select_best": false,
+    "baseline_rows_separate_from_locked_recipes": true,
+    "create_test_coupon_action_placeholder_only": true,
+    "rule": "Search/filter helps users find reference records only. It does not recommend, rank, auto-select, approve, lock, or create production-ready recipes."
+  },
+  "view_sections": [
+    "filter_panel",
+    "results_summary",
+    "baseline_reference_cards",
+    "safety_status_labels",
+    "create_test_coupon_placeholder_action",
+    "empty_state"
+  ]
+}
