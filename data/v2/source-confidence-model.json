@@ -1,0 +1,121 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V2",
+  "milestone": "V2-M2 — Mild Steel Baseline Source Label Model",
+  "purpose": "Create the source label and confidence model for mild steel baseline range data so every future baseline row clearly identifies where it came from and how much trust it should receive.",
+  "locked_context": {
+    "v1_status": "complete_closed",
+    "v2_m1_status": "baseline_range_table_structure_exists_reference_only_by_default",
+    "core_rule": "Baseline range = starting reference only. Tested result = what actually happened. Locked recipe = approved production record.",
+    "required_control_path": "Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe"
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "machine_scope": "Vectis cobot",
+    "welder_scope": "Miller 352 MPa",
+    "source_confidence_model_only": true,
+    "large_weld_data_dump_allowed": false,
+    "real_weld_ranges_allowed": false,
+    "recommendation_logic": false,
+    "production_ready_claims_allowed": false,
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"]
+  },
+  "required_source_labels": [
+    "MILLER_MACHINE_REFERENCE",
+    "VECTIS_MANUAL_GUARDRAIL",
+    "SHOP_SCREENSHOT_REFERENCE",
+    "SHOP_REFERENCE",
+    "PUBLIC_REFERENCE",
+    "TEST_COUPON_RESULT",
+    "LOCKED_RECIPE_RECORD"
+  ],
+  "source_label_definitions": {
+    "MILLER_MACHINE_REFERENCE": "Machine-side arc reference data. Not a proven Vectis production recipe unless tested and approved.",
+    "VECTIS_MANUAL_GUARDRAIL": "Vectis cobot setup, process, weave, or motion guardrail. Not a full production weld chart.",
+    "SHOP_SCREENSHOT_REFERENCE": "Captured shop screen or setting image. Useful reference, but not approved until tied to test results.",
+    "SHOP_REFERENCE": "Shop-known reference setting or process memory. Not production-ready unless tested and approved.",
+    "PUBLIC_REFERENCE": "Internet, vendor, or public reference source. Starting reference only.",
+    "TEST_COUPON_RESULT": "Actual tested weld result from a controlled coupon or test event.",
+    "LOCKED_RECIPE_RECORD": "Approved production record created only after test pass and lock authorization."
+  },
+  "required_confidence_levels": [
+    "REFERENCE_ONLY",
+    "SHOP_REFERENCE",
+    "SHOP_SCREENSHOT_REFERENCE",
+    "TESTED_RESULT",
+    "LOCKED_RECIPE"
+  ],
+  "confidence_level_definitions": {
+    "REFERENCE_ONLY": "Starting reference data only. Requires testing before approval or locking.",
+    "SHOP_REFERENCE": "Shop-sourced reference data. Still requires test coupon and approval before locking.",
+    "SHOP_SCREENSHOT_REFERENCE": "Reference captured from screenshot/photo evidence. Still requires test coupon and approval before locking.",
+    "TESTED_RESULT": "Actual recorded test result. Not locked until approval and lock authorization are complete.",
+    "LOCKED_RECIPE": "Approved production record. Must trace back to a passed test coupon and approval record."
+  },
+  "required_source_metadata_fields": [
+    "source_label",
+    "source_name",
+    "source_type",
+    "source_notes",
+    "captured_from",
+    "captured_by",
+    "captured_date",
+    "confidence_level",
+    "requiresTestCoupon",
+    "linked_test_coupon_id",
+    "linked_locked_recipe_id",
+    "approval_status",
+    "production_ready"
+  ],
+  "required_defaults_for_baseline_rows": {
+    "confidence_level": "REFERENCE_ONLY",
+    "requiresTestCoupon": true,
+    "linked_test_coupon_id": null,
+    "linked_locked_recipe_id": null,
+    "approval_status": "not_approved",
+    "production_ready": false
+  },
+  "baseline_row_controls": {
+    "source_labels_equal_approval": false,
+    "confidence_labels_equal_production_approval": false,
+    "miller_data_can_be_locked_recipe_data_without_test": false,
+    "vectis_manual_can_be_locked_recipe_data_without_test": false,
+    "shop_screenshots_can_be_locked_recipe_data_without_test": false,
+    "recommendation_logic_allowed": false,
+    "rule": "Source and confidence labels describe origin and trust level only. They do not approve, lock, recommend, or make a row production-ready."
+  },
+  "baseline_source_examples": [
+    {
+      "source_label": "MILLER_MACHINE_REFERENCE",
+      "source_name": "Example Miller machine reference",
+      "source_type": "machine_reference",
+      "source_notes": "Example only. Machine-side arc baseline reference, not approved production data.",
+      "captured_from": "example_reference_placeholder",
+      "captured_by": "",
+      "captured_date": "",
+      "confidence_level": "REFERENCE_ONLY",
+      "requiresTestCoupon": true,
+      "linked_test_coupon_id": null,
+      "linked_locked_recipe_id": null,
+      "approval_status": "not_approved",
+      "production_ready": false
+    },
+    {
+      "source_label": "SHOP_SCREENSHOT_REFERENCE",
+      "source_name": "Example shop screenshot reference",
+      "source_type": "shop_screenshot",
+      "source_notes": "Example only. Screenshot data must be tested before approval or locking.",
+      "captured_from": "example_screenshot_placeholder",
+      "captured_by": "",
+      "captured_date": "",
+      "confidence_level": "SHOP_SCREENSHOT_REFERENCE",
+      "requiresTestCoupon": true,
+      "linked_test_coupon_id": null,
+      "linked_locked_recipe_id": null,
+      "approval_status": "not_approved",
+      "production_ready": false
+    }
+  ]
+}
