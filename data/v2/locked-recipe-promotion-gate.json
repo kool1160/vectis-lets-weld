@@ -1,0 +1,96 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V2",
+  "milestone": "V2-M6 — Locked Recipe Promotion Gate",
+  "purpose": "Create the V2 locked recipe promotion gate that controls when a tested result can be promoted into a locked production recipe.",
+  "locked_context": {
+    "v1_status": "complete_closed",
+    "v2_m1_status": "locked_passed",
+    "v2_m2_status": "locked_passed",
+    "v2_m3_status": "locked_passed",
+    "v2_m4_status": "locked_passed",
+    "v2_m5_status": "locked_passed",
+    "core_rule": "Baseline range = starting reference only. Tested result = what actually happened. Locked recipe = approved production record.",
+    "required_control_path": "Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe"
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "machine_scope": "Vectis cobot",
+    "welder_scope": "Miller 352 MPa",
+    "locked_recipe_promotion_gate_structure_only": true,
+    "automatic_locking_allowed": false,
+    "recommendation_logic": false,
+    "ranking_allowed": false,
+    "real_baseline_range_data_allowed": false,
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"]
+  },
+  "required_promotion_fields": [
+    "promotion_gate_id",
+    "tested_result_id",
+    "baseline_range_id",
+    "test_coupon_id",
+    "promotion_status",
+    "test_status",
+    "pass_fail",
+    "approval_required",
+    "approval_status",
+    "approved_by",
+    "approval_date",
+    "lock_authorized_by",
+    "lock_date",
+    "locked_recipe_id",
+    "production_ready",
+    "rejection_reason",
+    "retest_required",
+    "notes"
+  ],
+  "required_statuses": [
+    "promotion_not_started",
+    "promotion_review_required",
+    "promotion_blocked",
+    "rejected",
+    "retest_required",
+    "approved_for_lock",
+    "locked_recipe_created"
+  ],
+  "required_defaults": {
+    "promotion_status": "promotion_review_required",
+    "approval_required": true,
+    "approval_status": "not_approved",
+    "locked_recipe_id": null,
+    "production_ready": false,
+    "retest_required": false
+  },
+  "required_lock_conditions": [
+    "tested_result_id exists",
+    "test_status is completed",
+    "pass_fail is pass",
+    "approval_status is approved_for_lock",
+    "approved_by is present",
+    "approval_date is present",
+    "lock_authorized_by is present",
+    "locked_recipe_id is created during lock step",
+    "production_ready becomes true only after lock"
+  ],
+  "promotion_rules": {
+    "tested_result_auto_lock_allowed": false,
+    "passing_result_auto_lock_allowed": false,
+    "approval_required_before_lock": true,
+    "failed_results_must_be_blocked_or_retest": true,
+    "rejected_results_can_be_locked": false,
+    "baseline_range_can_bypass_tested_result_history": false,
+    "production_ready_true_before_locked_recipe": false,
+    "rule": "A tested result can only be promoted into a locked recipe after passing test evidence, approval for lock, lock authorization, and intentional locked recipe creation."
+  },
+  "blocked_rejected_fields": [
+    "promotion_gate_id",
+    "tested_result_id",
+    "promotion_status",
+    "rejection_reason",
+    "retest_required",
+    "notes"
+  ],
+  "promotion_gate_records": []
+}
