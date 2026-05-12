@@ -11,7 +11,7 @@ AI-Weld Settings Library / Vectis Weld Recipe Control
 | V1-M1 | Project Scope Lock | CREATED |
 | V1-M2 | Weld Recipe Data Field Structure | CREATED |
 | V1-M3 | Weave Settings Module | CREATED |
-| V1-M4 | Baseline Settings Table | NOT STARTED |
+| V1-M4 | Baseline Settings Table | CREATED |
 | V1-M5 | Test Coupon Entry Screen | NOT STARTED |
 | V1-M6 | Recipe Approval / Locking Rules | NOT STARTED |
 | V1-M7 | Production Recipe Sheet Output | NOT STARTED |
