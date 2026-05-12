@@ -1,0 +1,106 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V1",
+  "milestone": "V1-M6 — Recipe Approval / Locking Rules",
+  "purpose": "Control when a tested mild steel weld setting can become an approved and locked production recipe.",
+  "machine_scope": {
+    "cobot": "Vectis cobot",
+    "welder": "Miller 352 MPa"
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "allowed_wire": [".035 ER70S-6", ".045 ER70S-6"],
+    "allowed_gas": "Shop-used mild steel gas only",
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"],
+    "recommendation_logic": false,
+    "workflow": "Collect → Test → Approve → Lock → Reuse"
+  },
+  "required_statuses": [
+    "baseline_reference",
+    "test_required",
+    "test_in_progress",
+    "test_passed",
+    "test_failed",
+    "retest_required",
+    "approved_for_lock",
+    "locked_recipe",
+    "rejected"
+  ],
+  "status_definitions": {
+    "baseline_reference": "Collected starting data only. Not tested, not approved, and not production-ready.",
+    "test_required": "Baseline setting requires a test coupon before approval can be considered.",
+    "test_in_progress": "Test coupon has been started but not completed or approved.",
+    "test_passed": "Test coupon result passed required weld review checks.",
+    "test_failed": "Test coupon result failed one or more required weld review checks.",
+    "retest_required": "A failed, rejected, adjusted, or questionable setup must be tested again before approval.",
+    "approved_for_lock": "Tested recipe has been approved and may be intentionally locked.",
+    "locked_recipe": "Approved recipe has been intentionally locked for production reuse.",
+    "rejected": "Test result or recipe setup was rejected and cannot be locked without retest."
+  },
+  "required_fields": [
+    "approval_record_id",
+    "baseline_id",
+    "test_coupon_id",
+    "locked_recipe_id",
+    "approval_status",
+    "test_status",
+    "approved_by",
+    "approved_date",
+    "rejection_reason",
+    "retest_required",
+    "lock_authorized_by",
+    "lock_date",
+    "production_ready",
+    "revision",
+    "notes"
+  ],
+  "locking_rules": {
+    "baseline_direct_lock_allowed": false,
+    "test_coupon_auto_lock_allowed": false,
+    "required_test_status_for_lock": "test_passed",
+    "required_approval_status_for_lock": "approved_for_lock",
+    "production_ready_default": false,
+    "production_ready_rule": "production_ready must remain false until approval_status is approved_for_lock and locked_recipe_id is assigned intentionally.",
+    "failed_test_rule": "If test_status is test_failed, approval_status must be rejected or retest_required and production_ready must remain false.",
+    "rejected_test_rule": "Rejected tests require retest before any approval_for_lock status is allowed.",
+    "locked_recipe_id_rule": "locked_recipe_id must remain null until test_status is test_passed and approval_status is approved_for_lock."
+  },
+  "approval_records": [
+    {
+      "approval_record_id": "APR-MS-001",
+      "baseline_id": "MS-BL-001",
+      "test_coupon_id": "TC-MS-001",
+      "locked_recipe_id": null,
+      "approval_status": "test_required",
+      "test_status": "test_required",
+      "approved_by": "",
+      "approved_date": "",
+      "rejection_reason": "",
+      "retest_required": false,
+      "lock_authorized_by": "",
+      "lock_date": "",
+      "production_ready": false,
+      "revision": "0",
+      "notes": "Approval placeholder linked to baseline and test coupon. Cannot lock until test passes and approval is granted."
+    },
+    {
+      "approval_record_id": "APR-MS-002",
+      "baseline_id": "MS-BL-002",
+      "test_coupon_id": "TC-MS-002",
+      "locked_recipe_id": null,
+      "approval_status": "test_required",
+      "test_status": "test_required",
+      "approved_by": "",
+      "approved_date": "",
+      "rejection_reason": "",
+      "retest_required": false,
+      "lock_authorized_by": "",
+      "lock_date": "",
+      "production_ready": false,
+      "revision": "0",
+      "notes": "Approval placeholder linked to baseline and test coupon. Cannot lock until test passes and approval is granted."
+    }
+  ]
+}
