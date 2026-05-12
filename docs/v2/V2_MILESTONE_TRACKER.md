@@ -15,7 +15,7 @@ Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe
 | Milestone | Name | Status |
 |---|---|---|
 | V2-M1 | Mild Steel Baseline Range Table Structure | CREATED |
-| V2-M2 | Mild Steel Baseline Source Label Model | NOT STARTED |
+| V2-M2 | Mild Steel Baseline Source Label Model | CREATED |
 | V2-M3 | Baseline Range Entry Form Structure | NOT STARTED |
 | V2-M4 | Test Coupon Linkage From Baseline Range | NOT STARTED |
 | V2-M5 | Tested Result History Structure | NOT STARTED |
