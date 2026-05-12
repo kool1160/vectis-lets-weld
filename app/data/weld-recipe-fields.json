@@ -1,0 +1,108 @@
+{
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V1",
+  "materialScope": "Mild steel only",
+  "fieldGroups": {
+    "recipeIdentification": [
+      "recipeId",
+      "recipeName",
+      "recipeStatus",
+      "sourceType",
+      "createdDate",
+      "createdBy",
+      "lastRevisedDate",
+      "revisionNumber"
+    ],
+    "materialInformation": [
+      "materialType",
+      "thickness",
+      "gauge",
+      "partNumber",
+      "workOrder",
+      "partDescription",
+      "materialCondition",
+      "fitUpCondition"
+    ],
+    "jointWeldType": [
+      "jointType",
+      "weldPosition",
+      "weldSize",
+      "weldLength",
+      "weldSymbolPrintCallout",
+      "singleOrMultiPass",
+      "continuousOrIntermittent"
+    ],
+    "wireGasProcess": [
+      "process",
+      "wireType",
+      "wireDiameter",
+      "gasMixture",
+      "gasFlowRate",
+      "millerProgram"
+    ],
+    "machineSettings": [
+      "wireFeedSpeed",
+      "trimArcLength",
+      "sharpArcArcControl",
+      "voltageActual",
+      "amperageActual",
+      "preflow",
+      "postflow",
+      "craterFillSetting"
+    ],
+    "cobotMotionSettings": [
+      "robotProgramName",
+      "travelSpeed",
+      "ctwdStickout",
+      "torchAngle",
+      "workAngle",
+      "pushPullAngle",
+      "startDelay",
+      "endDelay",
+      "approachPointNotes",
+      "retractPointNotes"
+    ],
+    "weavePatternSettings": [
+      "weaveType",
+      "weaveLength",
+      "weaveWidth",
+      "dwellLeft",
+      "dwellRight",
+      "coolTime",
+      "fillTime",
+      "forwardStep",
+      "backStep",
+      "backStepPause"
+    ],
+    "testWeldResultFields": [
+      "couponId",
+      "visualResult",
+      "tieIn",
+      "undercut",
+      "overlap",
+      "spatter",
+      "porosity",
+      "burnThrough",
+      "distortion",
+      "cutEtchRequired",
+      "passFail",
+      "testNotes"
+    ],
+    "approvalLockedRecipeControl": [
+      "approvedBy",
+      "approvalDate",
+      "lockStatus",
+      "lockedToPartNumber",
+      "lockedToFixture",
+      "supersededBy",
+      "rejectionReason"
+    ],
+    "notesRevisionHistory": [
+      "operatorNotes",
+      "engineerNotes",
+      "revisionReason",
+      "changeHistory",
+      "lessonsLearned"
+    ]
+  }
+}
