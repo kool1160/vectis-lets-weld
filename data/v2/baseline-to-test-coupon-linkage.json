@@ -1,0 +1,111 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V2",
+  "milestone": "V2-M4 — Test Coupon Linkage From Baseline Range",
+  "purpose": "Create the V2 structure that links a reference-only baseline range entry to a test coupon without allowing the baseline range to become approved, locked, or production-ready.",
+  "locked_context": {
+    "v1_status": "complete_closed",
+    "v2_m1_status": "locked_passed",
+    "v2_m2_status": "locked_passed",
+    "v2_m3_status": "locked_passed",
+    "core_rule": "Baseline range = starting reference only. Tested result = what actually happened. Locked recipe = approved production record.",
+    "required_control_path": "Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe"
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "machine_scope": "Vectis cobot",
+    "welder_scope": "Miller 352 MPa",
+    "test_coupon_linkage_structure_only": true,
+    "recommendation_logic": false,
+    "production_ready_baseline_claims_allowed": false,
+    "real_weld_ranges_allowed": false,
+    "ranking_allowed": false,
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"]
+  },
+  "required_linkage_fields": [
+    "baseline_range_id",
+    "test_coupon_id",
+    "linkage_status",
+    "created_from_baseline_range",
+    "source_label",
+    "confidence_level",
+    "requiresTestCoupon",
+    "test_coupon_required",
+    "test_coupon_created",
+    "test_coupon_created_by",
+    "test_coupon_created_date",
+    "linked_test_coupon_id",
+    "linked_locked_recipe_id",
+    "approval_status",
+    "production_ready",
+    "notes"
+  ],
+  "required_statuses": [
+    "baseline_reference_only",
+    "test_coupon_required",
+    "test_coupon_created",
+    "test_in_progress",
+    "test_completed",
+    "test_failed",
+    "test_passed",
+    "approval_required",
+    "approved_for_lock",
+    "locked_recipe"
+  ],
+  "required_defaults": {
+    "linkage_status": "test_coupon_required",
+    "created_from_baseline_range": true,
+    "requiresTestCoupon": true,
+    "test_coupon_required": true,
+    "test_coupon_created": false,
+    "linked_test_coupon_id": null,
+    "linked_locked_recipe_id": null,
+    "approval_status": "not_approved",
+    "production_ready": false
+  },
+  "linkage_rules": {
+    "baseline_range_can_be_approved_directly": false,
+    "baseline_range_can_be_locked_directly": false,
+    "baseline_range_can_be_production_ready_directly": false,
+    "test_coupon_required_before_approval": true,
+    "passing_test_required_before_approval": true,
+    "approval_required_before_locked_recipe": true,
+    "rule": "A baseline range may request or create a linked test coupon, but the baseline range itself remains reference-only. Approval and locking occur only after a passing tested result and approval record."
+  },
+  "conversion_request_fields": [
+    "baseline_range_id",
+    "requested_test_coupon_id",
+    "requested_by",
+    "requested_date",
+    "reason_for_test",
+    "test_priority",
+    "target_material",
+    "target_thickness",
+    "target_joint_type",
+    "target_weld_position",
+    "target_mode",
+    "notes"
+  ],
+  "linkage_records": [
+    {
+      "baseline_range_id": "EXAMPLE-MS-BR-001",
+      "test_coupon_id": null,
+      "linkage_status": "test_coupon_required",
+      "created_from_baseline_range": true,
+      "source_label": "MIXED_REFERENCE",
+      "confidence_level": "REFERENCE_ONLY",
+      "requiresTestCoupon": true,
+      "test_coupon_required": true,
+      "test_coupon_created": false,
+      "test_coupon_created_by": "",
+      "test_coupon_created_date": "",
+      "linked_test_coupon_id": null,
+      "linked_locked_recipe_id": null,
+      "approval_status": "not_approved",
+      "production_ready": false,
+      "notes": "Example linkage only. Baseline range remains reference-only until a test coupon is created, tested, passed, approved, and intentionally locked as a separate recipe."
+    }
+  ]
+}
