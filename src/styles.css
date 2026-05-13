@@ -31,7 +31,8 @@ input {
 
 .hero-card,
 .panel,
-.status-bar {
+.status-bar,
+.screen-tabs {
   border: 1px solid rgba(148, 163, 184, 0.22);
   background: rgba(15, 23, 42, 0.78);
   border-radius: 28px;
@@ -62,7 +63,7 @@ h1 {
 }
 
 .hero-copy {
-  max-width: 820px;
+  max-width: 840px;
   color: #cbd5e1;
   font-size: clamp(1rem, 2vw, 1.22rem);
   line-height: 1.55;
@@ -77,6 +78,27 @@ h1 {
   border: 1px solid rgba(56, 189, 248, 0.36);
   color: #e0f2fe;
   font-weight: 800;
+}
+
+.screen-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+  margin-bottom: 18px;
+}
+
+.screen-tabs button {
+  background: rgba(30, 41, 59, 0.74);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  color: #cbd5e1;
+  font-size: 0.8rem;
+}
+
+.screen-tabs button.active {
+  background: #38bdf8;
+  color: #082f49;
+  border-color: rgba(56, 189, 248, 0.9);
 }
 
 .status-bar {
@@ -206,6 +228,14 @@ button {
   .hero-card,
   .panel {
     padding: 22px;
+  }
+
+  .screen-tabs {
+    border-radius: 22px;
+  }
+
+  .screen-tabs button {
+    width: 100%;
   }
 
   .helper-grid,
