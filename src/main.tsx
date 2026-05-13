@@ -21,22 +21,6 @@ const screens = [
   { id: 'gate', label: 'Approval / Locked Gate' },
 ];
 
-const setupContextFields = [
-  'Material',
-  'Thickness',
-  'Gauge',
-  'Joint Type',
-  'Weld Position',
-  'Wire Type',
-  'Wire Diameter',
-  'Gas',
-  'Mode',
-  'Operator',
-  'Date',
-  'Traceable ID Type',
-  'Traceable ID Value',
-];
-
 const actualSettingFields = [
   'WFS',
   'Voltage or Trim',
@@ -70,6 +54,25 @@ const trialResultFields = [
   'Result Notes',
 ];
 
+const setupSelectFields = [
+  { label: 'Material', value: 'Mild steel', options: ['Mild steel'] },
+  { label: 'Wire Type', value: 'ER70S-6', options: ['ER70S-6'] },
+  { label: 'Wire Diameter', value: '.035 ER70S-6', options: ['.035 ER70S-6', '.045 ER70S-6'] },
+  { label: 'Gas', value: 'Shop-used mild steel gas only', options: ['Shop-used mild steel gas only'] },
+  { label: 'Mode', value: 'MIG/CV', options: ['MIG/CV', 'Pulse MIG'] },
+  { label: 'Traceable ID Type', value: 'Test Coupon ID', options: ['Job Number', 'Job Name', 'Part Description', 'Part Number', 'Test Coupon ID'] },
+];
+
+const setupInputFields = [
+  'Thickness',
+  'Gauge',
+  'Joint Type',
+  'Weld Position',
+  'Operator',
+  'Date',
+  'Traceable ID Value',
+];
+
 function FieldGrid({ fields }: { fields: string[] }) {
   return (
     <div className="field-grid">
@@ -77,6 +80,37 @@ function FieldGrid({ fields }: { fields: string[] }) {
         <label className="field" key={field}>
           <span>{field}</span>
           <input placeholder="Enter / select" aria-label={field} />
+        </label>
+      ))}
+    </div>
+  );
+}
+
+function SetupEntryControls() {
+  return (
+    <div className="field-grid">
+      {setupSelectFields.map((field) => (
+        <label className="field" key={field.label}>
+          <span>{field.label}</span>
+          <select aria-label={field.label} defaultValue={field.value}>
+            {field.options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </label>
+      ))}
+
+      {setupInputFields.map((field) => (
+        <label className="field" key={field}>
+          <span>{field}</span>
+          <input
+            aria-label={field}
+            placeholder={field === 'Traceable ID Value' ? 'Required before setup is complete' : 'Enter value'}
+            required={field === 'Traceable ID Value'}
+            type={field === 'Date' ? 'date' : 'text'}
+          />
         </label>
       ))}
     </div>
@@ -145,8 +179,11 @@ function App() {
             <div className="panel-heading">
               <p className="section-kicker">Setup Entry</p>
               <h2>Setup Context</h2>
+              <p className="panel-note">
+                Controlled mild steel setup only. Traceable ID type and value are required before this setup should move forward.
+              </p>
             </div>
-            <FieldGrid fields={setupContextFields} />
+            <SetupEntryControls />
           </article>
           <article className="panel">
             <div className="panel-heading">
