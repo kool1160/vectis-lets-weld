@@ -1,0 +1,76 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V3",
+  "milestone": "V3-M2 — Setup Entry Screen Behavior",
+  "purpose": "Create the setup entry screen behavior so a user can enter the basic weld setup context while standing at the Vectis cobot / Miller 352 MPa.",
+  "locked_context": {
+    "v1_status": "complete_closed",
+    "v2_status": "complete_closed",
+    "v3_m1_status": "locked_passed",
+    "control_path": "Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe"
+  },
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "allowed_processes": ["MIG", "Pulse MIG"],
+    "machine_scope": "Vectis cobot",
+    "welder_scope": "Miller 352 MPa",
+    "setup_entry_behavior_only": true,
+    "local_static_behavior_allowed": true,
+    "recommendation_logic": false,
+    "ranking_allowed": false,
+    "auto_select_settings_allowed": false,
+    "production_ready_baseline_claims_allowed": false,
+    "real_baseline_range_data_allowed": false,
+    "print_export_logic_allowed": false,
+    "excluded": ["stainless", "aluminum", "flux-core", "metal-core"]
+  },
+  "required_setup_fields": [
+    "material",
+    "thickness",
+    "gauge",
+    "joint_type",
+    "weld_position",
+    "wire_type",
+    "wire_diameter",
+    "gas",
+    "mode",
+    "operator",
+    "date",
+    "traceable_identifier_type",
+    "traceable_identifier_value"
+  ],
+  "defaults_constraints": {
+    "material": {
+      "default": "Mild steel",
+      "allowed_values": ["Mild steel"]
+    },
+    "mode": {
+      "allowed_values": ["MIG/CV", "Pulse MIG"]
+    },
+    "wire_diameter": {
+      "allowed_values": [".035 ER70S-6", ".045 ER70S-6"]
+    },
+    "gas": {
+      "default": "Shop-used mild steel gas only",
+      "allowed_values": ["Shop-used mild steel gas only"]
+    },
+    "traceability_rule": "traceable_identifier_type and traceable_identifier_value are required before setup context is considered complete."
+  },
+  "required_safety_labels": [
+    "Reference Only",
+    "Requires Test Coupon",
+    "Not Approved",
+    "Not Production Ready",
+    "Not Locked Recipe"
+  ],
+  "completion_behavior": {
+    "can_continue_to_baseline_reference": true,
+    "can_create_approved_recipe": false,
+    "can_create_locked_recipe": false,
+    "can_mark_production_ready": false,
+    "can_recommend_settings": false,
+    "can_rank_settings": false,
+    "can_auto_select_settings": false
+  }
+}
