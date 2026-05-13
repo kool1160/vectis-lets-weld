@@ -38,7 +38,7 @@ Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe
 | V3-M2 | Setup Entry Screen Behavior | CREATED |
 | V3-M2A | Wire Setup Entry Controls Into App Screen | CREATED |
 | V3-M3 | Baseline Reference Screen Behavior | CREATED |
-| V3-M4 | Trial Result Entry Behavior | NOT STARTED |
+| V3-M4 | Trial Result Entry Behavior | CREATED |
 | V3-M5 | Local History Save / Review Behavior | NOT STARTED |
 | V3-M6 | What Worked Review Behavior | NOT STARTED |
 | V3-M7 | Approval / Locked Gate Display | NOT STARTED |
