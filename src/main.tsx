@@ -73,6 +73,31 @@ const setupInputFields = [
   'Traceable ID Value',
 ];
 
+const baselineReferenceRows = [
+  ['material', 'Mild steel'],
+  ['thickness', 'Reference placeholder'],
+  ['gauge', 'Reference placeholder'],
+  ['joint_type', 'Reference placeholder'],
+  ['weld_position', 'Reference placeholder'],
+  ['wire_type', 'ER70S-6'],
+  ['wire_diameter', '.035 / .045 ER70S-6 only'],
+  ['gas', 'Shop-used mild steel gas only'],
+  ['mode', 'MIG/CV or Pulse MIG'],
+  ['wfs_low', 'Reference only'],
+  ['wfs_high', 'Reference only'],
+  ['voltage_low', 'Reference only'],
+  ['voltage_high', 'Reference only'],
+  ['trim_or_arc_length_low', 'Reference only'],
+  ['trim_or_arc_length_high', 'Reference only'],
+  ['travel_speed_low', 'Reference only'],
+  ['travel_speed_high', 'Reference only'],
+  ['weave_type', 'Reference only'],
+  ['source_label', 'SHOP_REFERENCE / MILLER_MACHINE_REFERENCE / VECTIS_MANUAL_GUARDRAIL'],
+  ['confidence_level', 'REFERENCE_ONLY'],
+  ['baseline_status', 'REFERENCE_ONLY'],
+  ['requiresTestCoupon', 'true'],
+];
+
 function FieldGrid({ fields }: { fields: string[] }) {
   return (
     <div className="field-grid">
@@ -114,6 +139,49 @@ function SetupEntryControls() {
         </label>
       ))}
     </div>
+  );
+}
+
+function BaselineReferenceScreen() {
+  return (
+    <section className="helper-grid">
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Baseline Reference</p>
+          <h2>Reference-Only Baseline Guidance</h2>
+          <p className="panel-note">
+            Baseline values are starting references only. They are not approved, locked, ranked, recommended, proven, or production-ready.
+          </p>
+        </div>
+
+        <div className="reference-summary">
+          <span>Mild steel only</span>
+          <span>Vectis cobot</span>
+          <span>Miller 352 MPa</span>
+          <span>Requires Test Coupon</span>
+        </div>
+
+        <div className="reference-table" aria-label="Baseline reference fields">
+          {baselineReferenceRows.map(([label, value]) => (
+            <div className="reference-row" key={label}>
+              <strong>{label}</strong>
+              <span>{value}</span>
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <article className="panel wide review-panel">
+        <div>
+          <p className="section-kicker">Next Safe Step</p>
+          <h2>Create Test Coupon / Trial Weld</h2>
+          <p>
+            Use baseline guidance to start a test coupon or trial weld only. Tested results must be recorded before approval or locking can be considered.
+          </p>
+        </div>
+        <button type="button">Create Test Coupon</button>
+      </article>
+    </section>
   );
 }
 
@@ -202,15 +270,7 @@ function App() {
         </section>
       )}
 
-      {activeScreen === 'baseline' && (
-        <section className="helper-grid">
-          <PlaceholderPanel
-            title="Baseline Reference"
-            copy="Baseline ranges are starting reference only. They may help organize setup context, but they are not approved, locked, proven, or production-ready."
-            action="Create Test Coupon"
-          />
-        </section>
-      )}
+      {activeScreen === 'baseline' && <BaselineReferenceScreen />}
 
       {activeScreen === 'trial' && (
         <section className="helper-grid">
