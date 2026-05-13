@@ -22,7 +22,7 @@ Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe
 | V2-M6 | Locked Recipe Promotion Gate | CREATED |
 | V2-M7 | Baseline Search / Filter View | CREATED |
 | V2-M8 | Floor-Side Program Setup Helper Structure | CREATED |
-| V2-M9 | V2 Data-Control QA Review | NOT STARTED |
+| V2-M9 | Floor-Side Helper App Screen | CREATED |
 | V2-M10 | V2 Closeout / Source of Truth | NOT STARTED |
 
 ## Removed / Replaced Direction
