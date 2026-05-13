@@ -21,9 +21,12 @@ Reference Data → Test Coupon → Tested Result → Approval → Locked Recipe
 | V2-M5 | Tested Result History Structure | CREATED |
 | V2-M6 | Locked Recipe Promotion Gate | CREATED |
 | V2-M7 | Baseline Search / Filter View | CREATED |
-| V2-M8 | Print / Export Reference Sheet Structure | NOT STARTED |
+| V2-M8 | Floor-Side Program Setup Helper Structure | CREATED |
 | V2-M9 | V2 Data-Control QA Review | NOT STARTED |
 | V2-M10 | V2 Closeout / Source of Truth | NOT STARTED |
+
+## Removed / Replaced Direction
+The old V2-M8 Print / Export Reference Sheet Structure idea was removed from the active V2 milestone chain and replaced by the floor-side program setup helper structure. Print/export can be reconsidered later only as a separately scoped milestone if needed.
 
 ## V2 Locked Guardrail
 V2 baseline range work must not create proven production recipes from reference data. No recommendation logic is allowed until enough tested history exists.
