@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
 const safetyLabels = [
-  'Reference / Test Only',
+  'Reference Only',
   'Requires Test Coupon',
+  'Tested Result',
   'Not Approved',
   'Not Production Ready',
   'Not Locked Recipe',
+];
+
+const screens = [
+  { id: 'home', label: 'Home / Start' },
+  { id: 'setup', label: 'Setup Entry' },
+  { id: 'baseline', label: 'Baseline Reference' },
+  { id: 'trial', label: 'Trial Result Entry' },
+  { id: 'history', label: 'Local History' },
+  { id: 'worked', label: 'What Worked Review' },
+  { id: 'gate', label: 'Approval / Locked Gate' },
 ];
 
 const setupContextFields = [
@@ -72,17 +83,45 @@ function FieldGrid({ fields }: { fields: string[] }) {
   );
 }
 
+function PlaceholderPanel({ title, copy, action }: { title: string; copy: string; action: string }) {
+  return (
+    <article className="panel wide review-panel">
+      <div>
+        <p className="section-kicker">Placeholder</p>
+        <h2>{title}</h2>
+        <p>{copy}</p>
+      </div>
+      <button type="button">{action}</button>
+    </article>
+  );
+}
+
 function App() {
+  const [activeScreen, setActiveScreen] = useState('home');
+
   return (
     <main className="app-shell">
       <section className="hero-card">
         <p className="eyebrow">AI-Weld Settings Library</p>
-        <h1>Floor-Side Setup Helper</h1>
+        <h1>Vectis Floor-Side Workflow</h1>
         <p className="hero-copy">
-          Quick mild steel setup support for the Vectis cobot and Miller 352 MPa while writing or adjusting a weld program on the floor.
+          V3 turns the floor-side helper into a simple working app flow for mild steel Vectis cobot / Miller 352 MPa setup, trial results, local history, and review.
         </p>
         <div className="workflow">Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe</div>
       </section>
+
+      <nav className="screen-tabs" aria-label="V3 workflow navigation">
+        {screens.map((screen) => (
+          <button
+            className={activeScreen === screen.id ? 'active' : ''}
+            key={screen.id}
+            type="button"
+            onClick={() => setActiveScreen(screen.id)}
+          >
+            {screen.label}
+          </button>
+        ))}
+      </nav>
 
       <section className="status-bar" aria-label="Safety status labels">
         {safetyLabels.map((label) => (
@@ -90,60 +129,103 @@ function App() {
         ))}
       </section>
 
-      <section className="helper-grid">
-        <article className="panel wide">
-          <div className="panel-heading">
-            <p className="section-kicker">1</p>
-            <h2>Setup Context</h2>
-          </div>
-          <FieldGrid fields={setupContextFields} />
-        </article>
+      {activeScreen === 'home' && (
+        <section className="helper-grid">
+          <PlaceholderPanel
+            title="Start Floor-Side Setup"
+            copy="Use this workflow to enter setup context, reference baseline ranges, capture trial weld results, save local history, and review what worked. Nothing is approved or locked automatically."
+            action="Start Setup"
+          />
+        </section>
+      )}
 
-        <article className="panel">
-          <div className="panel-heading">
-            <p className="section-kicker">2</p>
-            <h2>Actual Settings Being Tried</h2>
-          </div>
-          <FieldGrid fields={actualSettingFields} />
-        </article>
+      {activeScreen === 'setup' && (
+        <section className="helper-grid">
+          <article className="panel wide">
+            <div className="panel-heading">
+              <p className="section-kicker">Setup Entry</p>
+              <h2>Setup Context</h2>
+            </div>
+            <FieldGrid fields={setupContextFields} />
+          </article>
+          <article className="panel">
+            <div className="panel-heading">
+              <p className="section-kicker">Actual Settings</p>
+              <h2>Machine Settings Being Tried</h2>
+            </div>
+            <FieldGrid fields={actualSettingFields} />
+          </article>
+          <article className="panel">
+            <div className="panel-heading">
+              <p className="section-kicker">Motion</p>
+              <h2>Cobot Motion / Weave Setup</h2>
+            </div>
+            <FieldGrid fields={weaveFields} />
+          </article>
+        </section>
+      )}
 
-        <article className="panel">
-          <div className="panel-heading">
-            <p className="section-kicker">3</p>
-            <h2>Cobot Motion / Weave Setup</h2>
-          </div>
-          <FieldGrid fields={weaveFields} />
-        </article>
+      {activeScreen === 'baseline' && (
+        <section className="helper-grid">
+          <PlaceholderPanel
+            title="Baseline Reference"
+            copy="Baseline ranges are starting reference only. They may help organize setup context, but they are not approved, locked, proven, or production-ready."
+            action="Create Test Coupon"
+          />
+        </section>
+      )}
 
-        <article className="panel wide">
-          <div className="panel-heading">
-            <p className="section-kicker">4</p>
-            <h2>Trial Weld Result</h2>
-          </div>
-          <FieldGrid fields={trialResultFields} />
-          <div className="evidence-row">
-            <label className="check-field">
-              <input type="checkbox" />
-              <span>Photo evidence available</span>
-            </label>
-            <label className="field evidence-input">
-              <span>Photo Evidence Reference</span>
-              <input placeholder="File name / photo note" aria-label="Photo Evidence Reference" />
-            </label>
-          </div>
-        </article>
+      {activeScreen === 'trial' && (
+        <section className="helper-grid">
+          <article className="panel wide">
+            <div className="panel-heading">
+              <p className="section-kicker">Trial Result Entry</p>
+              <h2>Record What Happened</h2>
+            </div>
+            <FieldGrid fields={trialResultFields} />
+            <div className="evidence-row">
+              <label className="check-field">
+                <input type="checkbox" />
+                <span>Photo evidence available</span>
+              </label>
+              <label className="field evidence-input">
+                <span>Photo Evidence Reference</span>
+                <input placeholder="File name / photo note" aria-label="Photo Evidence Reference" />
+              </label>
+            </div>
+          </article>
+        </section>
+      )}
 
-        <article className="panel wide review-panel">
-          <div>
-            <p className="section-kicker">5</p>
-            <h2>Save / Review Later</h2>
-            <p>
-              Saving this screen records reference/test information only. It does not approve, lock, recommend, rank, auto-select, or mark anything production-ready.
-            </p>
-          </div>
-          <button type="button">Save Test Notes</button>
-        </article>
-      </section>
+      {activeScreen === 'history' && (
+        <section className="helper-grid">
+          <PlaceholderPanel
+            title="Local History"
+            copy="Local/static history placeholder for saved trial notes. Future V3 work can add persistence, filtering, and record review."
+            action="View Saved Notes"
+          />
+        </section>
+      )}
+
+      {activeScreen === 'worked' && (
+        <section className="helper-grid">
+          <PlaceholderPanel
+            title="What Worked Review"
+            copy="Review tested results that worked without ranking, recommending, or calling them production-ready unless they pass approval and lock authorization."
+            action="Review Tested Results"
+          />
+        </section>
+      )}
+
+      {activeScreen === 'gate' && (
+        <section className="helper-grid">
+          <PlaceholderPanel
+            title="Approval / Locked Gate"
+            copy="Locked recipes require tested result, approval, approval date, lock authorization, and a locked recipe record. Passing trial results do not lock automatically."
+            action="Review Gate Rules"
+          />
+        </section>
+      )}
     </main>
   );
 }
