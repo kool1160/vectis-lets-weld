@@ -102,7 +102,8 @@ h1 {
   border-color: rgba(56, 189, 248, 0.9);
 }
 
-.status-bar {
+.status-bar,
+.reference-summary {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -110,7 +111,8 @@ h1 {
   margin-bottom: 18px;
 }
 
-.status-bar span {
+.status-bar span,
+.reference-summary span {
   padding: 10px 12px;
   border-radius: 999px;
   background: rgba(250, 204, 21, 0.12);
@@ -118,6 +120,16 @@ h1 {
   color: #fef3c7;
   font-weight: 900;
   font-size: 0.78rem;
+}
+
+.reference-summary {
+  padding: 0;
+}
+
+.reference-summary span {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: #e0f2fe;
 }
 
 .helper-grid {
@@ -150,22 +162,37 @@ h2 {
   font-size: 1.24rem;
 }
 
-.field-grid {
+.field-grid,
+.reference-table {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
-.field {
+.field,
+.reference-row {
   display: grid;
   gap: 7px;
 }
 
 .field span,
-.check-field span {
+.check-field span,
+.reference-row strong {
   color: #cbd5e1;
   font-size: 0.82rem;
   font-weight: 800;
+}
+
+.reference-row {
+  padding: 13px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(30, 41, 59, 0.54);
+}
+
+.reference-row span {
+  color: #f8fafc;
+  line-height: 1.35;
 }
 
 .field input,
@@ -249,6 +276,7 @@ button {
 
   .helper-grid,
   .field-grid,
+  .reference-table,
   .evidence-row {
     grid-template-columns: 1fr;
   }
