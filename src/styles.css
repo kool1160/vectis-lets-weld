@@ -19,7 +19,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -137,6 +138,12 @@ h1 {
   margin-bottom: 18px;
 }
 
+.panel-note {
+  margin: 10px 0 0;
+  color: #fef3c7;
+  line-height: 1.5;
+}
+
 h2 {
   margin: 0;
   color: #f8fafc;
@@ -161,7 +168,8 @@ h2 {
   font-weight: 800;
 }
 
-.field input {
+.field input,
+.field select {
   width: 100%;
   border: 1px solid rgba(148, 163, 184, 0.28);
   border-radius: 14px;
@@ -171,7 +179,8 @@ h2 {
   outline: none;
 }
 
-.field input:focus {
+.field input:focus,
+.field select:focus {
   border-color: rgba(56, 189, 248, 0.72);
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14);
 }
