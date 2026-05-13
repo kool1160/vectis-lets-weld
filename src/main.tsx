@@ -2,58 +2,146 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
-const recipeStatuses = ['REFERENCE', 'DRAFT', 'TESTED', 'APPROVED', 'LOCKED'];
+const safetyLabels = [
+  'Reference / Test Only',
+  'Requires Test Coupon',
+  'Not Approved',
+  'Not Production Ready',
+  'Not Locked Recipe',
+];
+
+const setupContextFields = [
+  'Material',
+  'Thickness',
+  'Gauge',
+  'Joint Type',
+  'Weld Position',
+  'Wire Type',
+  'Wire Diameter',
+  'Gas',
+  'Mode',
+  'Operator',
+  'Date',
+  'Traceable ID Type',
+  'Traceable ID Value',
+];
+
+const actualSettingFields = [
+  'WFS',
+  'Voltage or Trim',
+  'Travel Speed',
+  'CTWD',
+  'Torch / Work Angle',
+  'Push / Pull Angle',
+  'Pass Count',
+  'Notes',
+];
+
+const weaveFields = [
+  'Weave Type',
+  'Weave Parameters',
+  'Weave Width',
+  'Weave Length / Step',
+  'Weave Frequency / Pause',
+];
+
+const trialResultFields = [
+  'Test Status',
+  'Visual Result',
+  'Tie-In Result',
+  'Undercut Result',
+  'Overlap Result',
+  'Spatter Result',
+  'Porosity Result',
+  'Burn-Through Result',
+  'Distortion Result',
+  'Pass / Fail',
+  'Result Notes',
+];
+
+function FieldGrid({ fields }: { fields: string[] }) {
+  return (
+    <div className="field-grid">
+      {fields.map((field) => (
+        <label className="field" key={field}>
+          <span>{field}</span>
+          <input placeholder="Enter / select" aria-label={field} />
+        </label>
+      ))}
+    </div>
+  );
+}
 
 function App() {
   return (
     <main className="app-shell">
       <section className="hero-card">
         <p className="eyebrow">AI-Weld Settings Library</p>
-        <h1>Vectis Lets Weld</h1>
+        <h1>Floor-Side Setup Helper</h1>
         <p className="hero-copy">
-          Mild steel weld recipe control for the Vectis cobot and Miller 352 MPa.
+          Quick mild steel setup support for the Vectis cobot and Miller 352 MPa while writing or adjusting a weld program on the floor.
         </p>
-        <div className="workflow">Collect → Test → Approve → Lock → Reuse</div>
+        <div className="workflow">Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe</div>
       </section>
 
-      <section className="grid">
-        <article className="panel">
-          <h2>V1 Scope</h2>
-          <ul>
-            <li>Mild steel only</li>
-            <li>Vectis cobot only</li>
-            <li>Miller 352 MPa only</li>
-            <li>MIG / Pulse MIG only</li>
-            <li>.035 and .045 ER70S-6 wire</li>
-          </ul>
+      <section className="status-bar" aria-label="Safety status labels">
+        {safetyLabels.map((label) => (
+          <span key={label}>{label}</span>
+        ))}
+      </section>
+
+      <section className="helper-grid">
+        <article className="panel wide">
+          <div className="panel-heading">
+            <p className="section-kicker">1</p>
+            <h2>Setup Context</h2>
+          </div>
+          <FieldGrid fields={setupContextFields} />
         </article>
 
         <article className="panel">
-          <h2>Recipe Status</h2>
-          <div className="status-list">
-            {recipeStatuses.map((status) => (
-              <span key={status}>{status}</span>
-            ))}
+          <div className="panel-heading">
+            <p className="section-kicker">2</p>
+            <h2>Actual Settings Being Tried</h2>
           </div>
-          <p className="note">No production recipe can be locked without test result approval.</p>
+          <FieldGrid fields={actualSettingFields} />
+        </article>
+
+        <article className="panel">
+          <div className="panel-heading">
+            <p className="section-kicker">3</p>
+            <h2>Cobot Motion / Weave Setup</h2>
+          </div>
+          <FieldGrid fields={weaveFields} />
         </article>
 
         <article className="panel wide">
-          <h2>Weave Modes</h2>
-          <div className="weave-grid">
-            <div>
-              <strong>No Weave</strong>
-              <p>Straight ahead stringer path.</p>
-            </div>
-            <div>
-              <strong>Zig-Zag</strong>
-              <p>Side-to-side weave for coverage and tie-in.</p>
-            </div>
-            <div>
-              <strong>InLine</strong>
-              <p>Forward/back stepping along the weld path.</p>
-            </div>
+          <div className="panel-heading">
+            <p className="section-kicker">4</p>
+            <h2>Trial Weld Result</h2>
           </div>
+          <FieldGrid fields={trialResultFields} />
+          <div className="evidence-row">
+            <label className="check-field">
+              <input type="checkbox" />
+              <span>Photo evidence available</span>
+            </label>
+            <label className="field evidence-input">
+              <span>Photo Evidence Reference</span>
+              <input placeholder="File name / photo note" aria-label="Photo Evidence Reference" />
+            </label>
+          </div>
+        </article>
+
+        <article className="panel wide review-panel">
+          <div>
+            <p className="section-kicker">5</p>
+            <h2>Save / Review Later</h2>
+            <p>
+              Saving this screen records reference/test information only. It does not approve, lock, recommend, rank, auto-select, or mark anything production-ready.
+            </p>
+          </div>
+          <button type="button">Save Test Notes</button>
         </article>
       </section>
     </main>
