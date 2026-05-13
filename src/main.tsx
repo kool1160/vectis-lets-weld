@@ -1,6 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+
+type TrialRecord = {
+  id: string;
+  test_coupon_id: string;
+  recipe_attempt_id: string;
+  operator: string;
+  date: string;
+  traceable_identifier_type: string;
+  traceable_identifier_value: string;
+  material: string;
+  thickness: string;
+  joint_type: string;
+  mode: string;
+  wire_diameter: string;
+  gas: string;
+  wfs: string;
+  voltage_or_trim: string;
+  travel_speed: string;
+  weave_type: string;
+  pass_fail: string;
+  test_status: string;
+  result_notes: string;
+  created_at: string;
+};
+
+const historyStorageKey = 'vectis-weld-v3-trial-history';
 
 const safetyLabels = [
   'Reference Only',
@@ -48,6 +74,15 @@ const trialIdFields = [
   'Traceable ID Type',
   'Traceable ID Value',
   'Baseline Range ID',
+];
+
+const trialSetupSnapshotFields = [
+  'Material',
+  'Thickness',
+  'Joint Type',
+  'Mode',
+  'Wire Diameter',
+  'Gas',
 ];
 
 const trialResultFields = [
@@ -118,13 +153,22 @@ const baselineReferenceRows = [
   ['requiresTestCoupon', 'true'],
 ];
 
-function FieldGrid({ fields }: { fields: string[] }) {
+function fieldKey(field: string) {
+  return field.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+}
+
+function FieldGrid({ fields, prefix = '' }: { fields: string[]; prefix?: string }) {
   return (
     <div className="field-grid">
       {fields.map((field) => (
-        <label className="field" key={field}>
+        <label className="field" key={`${prefix}${field}`}>
           <span>{field}</span>
-          <input placeholder="Enter / select" aria-label={field} type={field === 'Date' ? 'date' : 'text'} />
+          <input
+            name={`${prefix}${fieldKey(field)}`}
+            placeholder="Enter / select"
+            aria-label={field}
+            type={field === 'Date' ? 'date' : 'text'}
+          />
         </label>
       ))}
     </div>
@@ -205,9 +249,39 @@ function BaselineReferenceScreen() {
   );
 }
 
-function TrialResultScreen() {
+function TrialResultScreen({ onSave }: { onSave: (record: TrialRecord) => void }) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const read = (key: string) => String(formData.get(key) || '').trim();
+
+    onSave({
+      id: crypto.randomUUID(),
+      test_coupon_id: read('trial_test_coupon_id'),
+      recipe_attempt_id: read('trial_recipe_attempt_id'),
+      operator: read('trial_operator'),
+      date: read('trial_date'),
+      traceable_identifier_type: read('trial_traceable_id_type'),
+      traceable_identifier_value: read('trial_traceable_id_value'),
+      material: read('snapshot_material') || 'Mild steel',
+      thickness: read('snapshot_thickness'),
+      joint_type: read('snapshot_joint_type'),
+      mode: read('snapshot_mode'),
+      wire_diameter: read('snapshot_wire_diameter'),
+      gas: read('snapshot_gas') || 'Shop-used mild steel gas only',
+      wfs: read('actual_wfs'),
+      voltage_or_trim: read('actual_voltage_or_trim'),
+      travel_speed: read('actual_travel_speed'),
+      weave_type: read('weave_weave_type'),
+      pass_fail: read('result_pass_fail'),
+      test_status: read('result_test_status'),
+      result_notes: read('result_result_notes'),
+      created_at: new Date().toISOString(),
+    });
+  }
+
   return (
-    <section className="helper-grid">
+    <form className="helper-grid" onSubmit={handleSubmit}>
       <article className="panel wide">
         <div className="panel-heading">
           <p className="section-kicker">Trial / Test Identification</p>
@@ -221,7 +295,15 @@ function TrialResultScreen() {
             <span key={label}>{label}</span>
           ))}
         </div>
-        <FieldGrid fields={trialIdFields} />
+        <FieldGrid fields={trialIdFields} prefix="trial_" />
+      </article>
+
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Setup Snapshot</p>
+          <h2>Required Saved Record Context</h2>
+        </div>
+        <FieldGrid fields={trialSetupSnapshotFields} prefix="snapshot_" />
       </article>
 
       <article className="panel">
@@ -229,7 +311,7 @@ function TrialResultScreen() {
           <p className="section-kicker">Actual Settings Tried</p>
           <h2>Machine Settings</h2>
         </div>
-        <FieldGrid fields={actualSettingFields} />
+        <FieldGrid fields={actualSettingFields} prefix="actual_" />
       </article>
 
       <article className="panel">
@@ -237,7 +319,7 @@ function TrialResultScreen() {
           <p className="section-kicker">Cobot Motion / Weave</p>
           <h2>Motion Settings</h2>
         </div>
-        <FieldGrid fields={weaveFields} />
+        <FieldGrid fields={weaveFields} prefix="weave_" />
       </article>
 
       <article className="panel wide">
@@ -245,17 +327,78 @@ function TrialResultScreen() {
           <p className="section-kicker">Weld Result Observations</p>
           <h2>Record What Happened</h2>
         </div>
-        <FieldGrid fields={trialResultFields} />
+        <FieldGrid fields={trialResultFields} prefix="result_" />
         <div className="evidence-row">
           <label className="check-field">
-            <input type="checkbox" />
+            <input name="photo_evidence_available" type="checkbox" />
             <span>Photo evidence available</span>
           </label>
           <label className="field evidence-input">
             <span>Photo Evidence Reference</span>
-            <input placeholder="File name / photo note" aria-label="Photo Evidence Reference" />
+            <input name="photo_evidence_reference" placeholder="File name / photo note" aria-label="Photo Evidence Reference" />
           </label>
         </div>
+      </article>
+
+      <article className="panel wide review-panel">
+        <div>
+          <p className="section-kicker">Save / Review Later</p>
+          <h2>Save Trial Evidence Locally</h2>
+          <p>Saved history remains evidence only. It does not approve, lock, rank, recommend, or mark anything production-ready.</p>
+        </div>
+        <button type="submit">Save Trial Evidence</button>
+      </article>
+    </form>
+  );
+}
+
+function LocalHistoryScreen({ records }: { records: TrialRecord[] }) {
+  return (
+    <section className="helper-grid">
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Local History</p>
+          <h2>Saved Trial Weld Evidence</h2>
+          <p className="panel-note">
+            Local history is review evidence only. It does not approve, lock, rank, recommend, or auto-select a setting.
+          </p>
+        </div>
+        <div className="reference-summary">
+          {trialSafetyLabels.map((label) => (
+            <span key={label}>{label}</span>
+          ))}
+        </div>
+
+        {records.length === 0 ? (
+          <div className="empty-state">
+            No saved trial weld history yet. Save a Trial Result Entry to review it here later.
+          </div>
+        ) : (
+          <div className="history-list">
+            {records.map((record) => (
+              <article className="history-card" key={record.id}>
+                <div>
+                  <strong>{record.test_coupon_id || 'No test coupon ID entered'}</strong>
+                  <span>{record.date || 'No date entered'} · {record.operator || 'No operator entered'}</span>
+                </div>
+                <div className="history-meta">
+                  <span>{record.material || 'Mild steel'}</span>
+                  <span>{record.thickness || 'Thickness not entered'}</span>
+                  <span>{record.joint_type || 'Joint not entered'}</span>
+                  <span>{record.mode || 'Mode not entered'}</span>
+                  <span>{record.wire_diameter || 'Wire not entered'}</span>
+                </div>
+                <p>{record.result_notes || 'No result notes entered.'}</p>
+                <div className="reference-summary compact">
+                  <span>{record.test_status || 'Test status not entered'}</span>
+                  <span>{record.pass_fail || 'Pass/fail not entered'}</span>
+                  <span>Evidence Only</span>
+                  <span>Not Approved</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </article>
     </section>
   );
@@ -276,6 +419,21 @@ function PlaceholderPanel({ title, copy, action }: { title: string; copy: string
 
 function App() {
   const [activeScreen, setActiveScreen] = useState('home');
+  const [trialRecords, setTrialRecords] = useState<TrialRecord[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(historyStorageKey);
+    if (saved) {
+      setTrialRecords(JSON.parse(saved) as TrialRecord[]);
+    }
+  }, []);
+
+  function saveTrialRecord(record: TrialRecord) {
+    const nextRecords = [record, ...trialRecords];
+    setTrialRecords(nextRecords);
+    localStorage.setItem(historyStorageKey, JSON.stringify(nextRecords));
+    setActiveScreen('history');
+  }
 
   return (
     <main className="app-shell">
@@ -348,17 +506,9 @@ function App() {
 
       {activeScreen === 'baseline' && <BaselineReferenceScreen />}
 
-      {activeScreen === 'trial' && <TrialResultScreen />}
+      {activeScreen === 'trial' && <TrialResultScreen onSave={saveTrialRecord} />}
 
-      {activeScreen === 'history' && (
-        <section className="helper-grid">
-          <PlaceholderPanel
-            title="Local History"
-            copy="Local/static history placeholder for saved trial notes. Future V3 work can add persistence, filtering, and record review."
-            action="View Saved Notes"
-          />
-        </section>
-      )}
+      {activeScreen === 'history' && <LocalHistoryScreen records={trialRecords} />}
 
       {activeScreen === 'worked' && (
         <section className="helper-grid">
