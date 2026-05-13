@@ -40,6 +40,16 @@ const weaveFields = [
   'Weave Frequency / Pause',
 ];
 
+const trialIdFields = [
+  'Test Coupon ID',
+  'Recipe Attempt ID',
+  'Operator',
+  'Date',
+  'Traceable ID Type',
+  'Traceable ID Value',
+  'Baseline Range ID',
+];
+
 const trialResultFields = [
   'Test Status',
   'Visual Result',
@@ -50,8 +60,18 @@ const trialResultFields = [
   'Porosity Result',
   'Burn-Through Result',
   'Distortion Result',
+  'Penetration Result',
   'Pass / Fail',
   'Result Notes',
+];
+
+const trialSafetyLabels = [
+  'Tested Result',
+  'Evidence Only',
+  'Not Approved',
+  'Not Production Ready',
+  'Not Locked Recipe',
+  'Approval Required Before Lock',
 ];
 
 const setupSelectFields = [
@@ -104,7 +124,7 @@ function FieldGrid({ fields }: { fields: string[] }) {
       {fields.map((field) => (
         <label className="field" key={field}>
           <span>{field}</span>
-          <input placeholder="Enter / select" aria-label={field} />
+          <input placeholder="Enter / select" aria-label={field} type={field === 'Date' ? 'date' : 'text'} />
         </label>
       ))}
     </div>
@@ -180,6 +200,62 @@ function BaselineReferenceScreen() {
           </p>
         </div>
         <button type="button">Create Test Coupon</button>
+      </article>
+    </section>
+  );
+}
+
+function TrialResultScreen() {
+  return (
+    <section className="helper-grid">
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Trial / Test Identification</p>
+          <h2>Record Test Context</h2>
+          <p className="panel-note">
+            This screen records evidence only. Pass/fail does not approve, lock, rank, recommend, or mark anything production-ready.
+          </p>
+        </div>
+        <div className="reference-summary">
+          {trialSafetyLabels.map((label) => (
+            <span key={label}>{label}</span>
+          ))}
+        </div>
+        <FieldGrid fields={trialIdFields} />
+      </article>
+
+      <article className="panel">
+        <div className="panel-heading">
+          <p className="section-kicker">Actual Settings Tried</p>
+          <h2>Machine Settings</h2>
+        </div>
+        <FieldGrid fields={actualSettingFields} />
+      </article>
+
+      <article className="panel">
+        <div className="panel-heading">
+          <p className="section-kicker">Cobot Motion / Weave</p>
+          <h2>Motion Settings</h2>
+        </div>
+        <FieldGrid fields={weaveFields} />
+      </article>
+
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Weld Result Observations</p>
+          <h2>Record What Happened</h2>
+        </div>
+        <FieldGrid fields={trialResultFields} />
+        <div className="evidence-row">
+          <label className="check-field">
+            <input type="checkbox" />
+            <span>Photo evidence available</span>
+          </label>
+          <label className="field evidence-input">
+            <span>Photo Evidence Reference</span>
+            <input placeholder="File name / photo note" aria-label="Photo Evidence Reference" />
+          </label>
+        </div>
       </article>
     </section>
   );
@@ -272,27 +348,7 @@ function App() {
 
       {activeScreen === 'baseline' && <BaselineReferenceScreen />}
 
-      {activeScreen === 'trial' && (
-        <section className="helper-grid">
-          <article className="panel wide">
-            <div className="panel-heading">
-              <p className="section-kicker">Trial Result Entry</p>
-              <h2>Record What Happened</h2>
-            </div>
-            <FieldGrid fields={trialResultFields} />
-            <div className="evidence-row">
-              <label className="check-field">
-                <input type="checkbox" />
-                <span>Photo evidence available</span>
-              </label>
-              <label className="field evidence-input">
-                <span>Photo Evidence Reference</span>
-                <input placeholder="File name / photo note" aria-label="Photo Evidence Reference" />
-              </label>
-            </div>
-          </article>
-        </section>
-      )}
+      {activeScreen === 'trial' && <TrialResultScreen />}
 
       {activeScreen === 'history' && (
         <section className="helper-grid">
