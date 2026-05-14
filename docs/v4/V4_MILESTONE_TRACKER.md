@@ -28,7 +28,7 @@ Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe
 | Milestone | Name | Status |
 |---|---|---|
 | V4-M1 | Miller / Vectis Baseline Library Structure | CREATED |
-| V4-M2 | Miller Machine Baseline Starter Rows | NOT STARTED |
+| V4-M2 | Miller Machine Baseline Starter Rows | CREATED |
 | V4-M3 | Vectis Weave / Motion Guardrail Rows | NOT STARTED |
 | V4-M4 | Baseline Library Display In App | NOT STARTED |
 | V4-M5 | User Correction / Justification Model | NOT STARTED |
