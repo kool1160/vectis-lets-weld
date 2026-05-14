@@ -109,6 +109,15 @@ const trialSafetyLabels = [
   'Approval Required Before Lock',
 ];
 
+const gateRequirements = [
+  'Tested result exists',
+  'Pass result exists',
+  'Approved by is required',
+  'Approval date is required',
+  'Lock authorization is required',
+  'Locked recipe ID is not created automatically',
+];
+
 const setupSelectFields = [
   { label: 'Material', value: 'Mild steel', options: ['Mild steel'] },
   { label: 'Wire Type', value: 'ER70S-6', options: ['ER70S-6'] },
@@ -471,6 +480,63 @@ function WhatWorkedScreen({ records }: { records: TrialRecord[] }) {
   );
 }
 
+function ApprovalGateScreen({ records }: { records: TrialRecord[] }) {
+  const testedResultExists = records.length > 0;
+  const passResultExists = records.some(isPassedTrial);
+  const eligibleForReview = testedResultExists && passResultExists;
+
+  return (
+    <section className="helper-grid">
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Approval / Locked Gate</p>
+          <h2>{eligibleForReview ? 'Eligible For Approval Review' : 'Promotion Blocked'}</h2>
+          <p className="panel-note">
+            This gate is display-only in V3. It shows what is missing before a tested result could be reviewed for approval and locking.
+          </p>
+        </div>
+        <div className="reference-summary">
+          <span>Not Approved</span>
+          <span>Not Production Ready</span>
+          <span>Not Locked Recipe</span>
+          <span>No Auto-Lock</span>
+        </div>
+
+        <div className="reference-table" aria-label="Approval gate requirements">
+          {gateRequirements.map((requirement) => {
+            const met = requirement === 'Tested result exists' ? testedResultExists : requirement === 'Pass result exists' ? passResultExists : false;
+            return (
+              <div className="reference-row" key={requirement}>
+                <strong>{requirement}</strong>
+                <span>{met ? 'Available for review' : 'Missing / required before lock'}</span>
+              </div>
+            );
+          })}
+        </div>
+      </article>
+
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Saved Trial Evidence</p>
+          <h2>Review Input</h2>
+          <p className="panel-note">
+            Saved trials can support an approval review, but they do not create approval, lock authorization, or a locked recipe ID.
+          </p>
+        </div>
+        {records.length === 0 ? (
+          <div className="empty-state">No saved trial evidence exists yet. Gate remains blocked.</div>
+        ) : (
+          <div className="history-list">
+            {records.map((record) => (
+              <TrialHistoryCard key={record.id} record={record} />
+            ))}
+          </div>
+        )}
+      </article>
+    </section>
+  );
+}
+
 function PlaceholderPanel({ title, copy, action }: { title: string; copy: string; action: string }) {
   return (
     <article className="panel wide review-panel">
@@ -579,15 +645,7 @@ function App() {
 
       {activeScreen === 'worked' && <WhatWorkedScreen records={trialRecords} />}
 
-      {activeScreen === 'gate' && (
-        <section className="helper-grid">
-          <PlaceholderPanel
-            title="Approval / Locked Gate"
-            copy="Locked recipes require tested result, approval, approval date, lock authorization, and a locked recipe record. Passing trial results do not lock automatically."
-            action="Review Gate Rules"
-          />
-        </section>
-      )}
+      {activeScreen === 'gate' && <ApprovalGateScreen records={trialRecords} />}
     </main>
   );
 }
