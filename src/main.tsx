@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
@@ -24,6 +24,18 @@ type TrialRecord = {
   test_status: string;
   result_notes: string;
   created_at: string;
+};
+
+type BaselineLookupRecord = {
+  id: string;
+  record_type: 'Miller Machine Baseline' | 'Vectis Motion / Weave Guardrail';
+  title: string;
+  scope: string;
+  process: 'MIG/CV' | 'Pulse MIG';
+  wire_size: '.035 ER70S-6' | '.045 ER70S-6';
+  value_status: 'missing_unverified' | 'source_pending' | 'source_verified' | 'shop_corrected_starting_point';
+  primary_status: string;
+  detail_rows: string[][];
 };
 
 const historyStorageKey = 'vectis-weld-v3-trial-history';
@@ -137,24 +149,75 @@ const setupInputFields = [
   'Traceable ID Value',
 ];
 
-const millerLibraryRows = [
-  ['Section', 'Miller Machine Baseline References'],
-  ['Scope', 'Machine-side arc setup references only'],
-  ['Source / Evidence Status', 'Required before numeric values are entered'],
-  ['Value Status', 'missing_unverified / verified_starting_reference'],
-  ['Test Weld Required', 'true'],
-  ['Control', 'Starting Reference — Verify With Test Weld'],
-  ['Status', 'Not Approved / Not Production Ready / Not Locked Recipe'],
-];
-
-const vectisGuardrailRows = [
-  ['Section', 'Vectis Motion / Weave Guardrails'],
-  ['Scope', 'Cobot-side motion/weave references only'],
-  ['Weave Pattern Type', 'No Weave / Zig-Zag / Sine / InLine / Other'],
-  ['Motion Value Status', 'missing_unverified / verified_starting_reference'],
-  ['Test Weld Required', 'true'],
-  ['Control', 'Starting Reference — Verify With Test Weld'],
-  ['Status', 'Not Approved / Not Production Ready / Not Locked Recipe'],
+const baselineLookupRecords: BaselineLookupRecord[] = [
+  {
+    id: 'miller-cv-035-shell',
+    record_type: 'Miller Machine Baseline',
+    title: 'Miller 352 MPa Machine Baseline Reference',
+    scope: 'Machine-side arc setup references only',
+    process: 'MIG/CV',
+    wire_size: '.035 ER70S-6',
+    value_status: 'missing_unverified',
+    primary_status: 'Starting Reference — Verify With Test Weld',
+    detail_rows: [
+      ['Source / Evidence Status', 'Required before numeric values are entered'],
+      ['Value Status', 'missing_unverified'],
+      ['Test Weld Required', 'true'],
+      ['Control', 'Starting Reference — Verify With Test Weld'],
+      ['Status', 'Not Approved / Not Production Ready / Not Locked Recipe'],
+    ],
+  },
+  {
+    id: 'miller-pulse-045-shell',
+    record_type: 'Miller Machine Baseline',
+    title: 'Miller 352 MPa Machine Baseline Reference',
+    scope: 'Machine-side arc setup references only',
+    process: 'Pulse MIG',
+    wire_size: '.045 ER70S-6',
+    value_status: 'missing_unverified',
+    primary_status: 'Starting Reference — Verify With Test Weld',
+    detail_rows: [
+      ['Source / Evidence Status', 'Required before numeric values are entered'],
+      ['Value Status', 'missing_unverified'],
+      ['Test Weld Required', 'true'],
+      ['Control', 'Starting Reference — Verify With Test Weld'],
+      ['Status', 'Not Approved / Not Production Ready / Not Locked Recipe'],
+    ],
+  },
+  {
+    id: 'vectis-cv-035-shell',
+    record_type: 'Vectis Motion / Weave Guardrail',
+    title: 'Vectis Motion / Weave Guardrail',
+    scope: 'Cobot-side motion/weave references only',
+    process: 'MIG/CV',
+    wire_size: '.035 ER70S-6',
+    value_status: 'missing_unverified',
+    primary_status: 'Starting Reference — Verify With Test Weld',
+    detail_rows: [
+      ['Weave Pattern Type', 'No Weave / Zig-Zag / Sine / InLine / Other'],
+      ['Motion Value Status', 'missing_unverified'],
+      ['Test Weld Required', 'true'],
+      ['Control', 'Starting Reference — Verify With Test Weld'],
+      ['Status', 'Not Approved / Not Production Ready / Not Locked Recipe'],
+    ],
+  },
+  {
+    id: 'vectis-pulse-045-shell',
+    record_type: 'Vectis Motion / Weave Guardrail',
+    title: 'Vectis Motion / Weave Guardrail',
+    scope: 'Cobot-side motion/weave references only',
+    process: 'Pulse MIG',
+    wire_size: '.045 ER70S-6',
+    value_status: 'missing_unverified',
+    primary_status: 'Starting Reference — Verify With Test Weld',
+    detail_rows: [
+      ['Weave Pattern Type', 'No Weave / Zig-Zag / Sine / InLine / Other'],
+      ['Motion Value Status', 'missing_unverified'],
+      ['Test Weld Required', 'true'],
+      ['Control', 'Starting Reference — Verify With Test Weld'],
+      ['Status', 'Not Approved / Not Production Ready / Not Locked Recipe'],
+    ],
+  },
 ];
 
 function fieldKey(field: string) {
@@ -223,6 +286,25 @@ function ReferenceTable({ rows }: { rows: string[][] }) {
   );
 }
 
+function LookupRecordCard({ record }: { record: BaselineLookupRecord }) {
+  return (
+    <article className="history-card">
+      <div>
+        <strong>{record.title}</strong>
+        <span>{record.scope}</span>
+      </div>
+      <div className="history-meta">
+        <span>{record.record_type}</span>
+        <span>{record.process}</span>
+        <span>{record.wire_size}</span>
+        <span>{record.value_status}</span>
+      </div>
+      <p>{record.primary_status}</p>
+      <ReferenceTable rows={record.detail_rows} />
+    </article>
+  );
+}
+
 function SetupEntryControls() {
   return (
     <div className="field-grid">
@@ -255,6 +337,25 @@ function SetupEntryControls() {
 }
 
 function BaselineReferenceScreen() {
+  const [processFilter, setProcessFilter] = useState('All');
+  const [wireFilter, setWireFilter] = useState('All');
+  const [recordTypeFilter, setRecordTypeFilter] = useState('All');
+  const [valueStatusFilter, setValueStatusFilter] = useState('All');
+
+  const filteredRecords = useMemo(() => {
+    return baselineLookupRecords.filter((record) => {
+      return (
+        (processFilter === 'All' || record.process === processFilter) &&
+        (wireFilter === 'All' || record.wire_size === wireFilter) &&
+        (recordTypeFilter === 'All' || record.record_type === recordTypeFilter) &&
+        (valueStatusFilter === 'All' || record.value_status === valueStatusFilter)
+      );
+    });
+  }, [processFilter, wireFilter, recordTypeFilter, valueStatusFilter]);
+
+  const millerRecords = filteredRecords.filter((record) => record.record_type === 'Miller Machine Baseline');
+  const vectisRecords = filteredRecords.filter((record) => record.record_type === 'Vectis Motion / Weave Guardrail');
+
   return (
     <section className="helper-grid">
       <article className="panel wide">
@@ -262,7 +363,7 @@ function BaselineReferenceScreen() {
           <p className="section-kicker">Baseline Library</p>
           <h2>Starting Reference — Verify With Test Weld</h2>
           <p className="panel-note">
-            Miller machine arc references and Vectis motion/weave guardrails are separated on purpose. These are not approved production recipes.
+            Filters narrow what is displayed only. They do not recommend, rank, score, auto-select, approve, or lock settings.
           </p>
         </div>
         <div className="reference-summary">
@@ -274,13 +375,59 @@ function BaselineReferenceScreen() {
         </div>
       </article>
 
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Lookup Filters</p>
+          <h2>Narrow Starting References</h2>
+          <p className="panel-note">No best match. No scoring. No auto-selecting. Filtered records remain Starting Reference — Verify With Test Weld.</p>
+        </div>
+        <div className="field-grid">
+          <label className="field">
+            <span>Process</span>
+            <select value={processFilter} onChange={(event) => setProcessFilter(event.target.value)}>
+              <option>All</option>
+              <option>MIG/CV</option>
+              <option>Pulse MIG</option>
+            </select>
+          </label>
+          <label className="field">
+            <span>Wire Size</span>
+            <select value={wireFilter} onChange={(event) => setWireFilter(event.target.value)}>
+              <option>All</option>
+              <option>.035 ER70S-6</option>
+              <option>.045 ER70S-6</option>
+            </select>
+          </label>
+          <label className="field">
+            <span>Record Type</span>
+            <select value={recordTypeFilter} onChange={(event) => setRecordTypeFilter(event.target.value)}>
+              <option>All</option>
+              <option>Miller Machine Baseline</option>
+              <option>Vectis Motion / Weave Guardrail</option>
+            </select>
+          </label>
+          <label className="field">
+            <span>Value Status</span>
+            <select value={valueStatusFilter} onChange={(event) => setValueStatusFilter(event.target.value)}>
+              <option>All</option>
+              <option>missing_unverified</option>
+              <option>source_pending</option>
+              <option>source_verified</option>
+              <option>shop_corrected_starting_point</option>
+            </select>
+          </label>
+        </div>
+      </article>
+
       <article className="panel">
         <div className="panel-heading">
           <p className="section-kicker">Miller 352 MPa</p>
           <h2>Machine Baseline References</h2>
           <p className="panel-note">Machine-side arc setup references only. Source, evidence, value status, and test weld requirement stay visible.</p>
         </div>
-        <ReferenceTable rows={millerLibraryRows} />
+        <div className="history-list">
+          {millerRecords.length === 0 ? <div className="empty-state">No Miller machine baseline references match the current filters.</div> : millerRecords.map((record) => <LookupRecordCard key={record.id} record={record} />)}
+        </div>
       </article>
 
       <article className="panel">
@@ -289,7 +436,9 @@ function BaselineReferenceScreen() {
           <h2>Motion / Weave Guardrails</h2>
           <p className="panel-note">Cobot-side travel, motion, weave, and setup guardrails only. These do not replace Miller machine arc settings.</p>
         </div>
-        <ReferenceTable rows={vectisGuardrailRows} />
+        <div className="history-list">
+          {vectisRecords.length === 0 ? <div className="empty-state">No Vectis motion/weave guardrails match the current filters.</div> : vectisRecords.map((record) => <LookupRecordCard key={record.id} record={record} />)}
+        </div>
       </article>
 
       <article className="panel wide review-panel">
@@ -297,7 +446,7 @@ function BaselineReferenceScreen() {
           <p className="section-kicker">Control Notice</p>
           <h2>Starting Reference — Verify With Test Weld</h2>
           <p>
-            Use these lanes to find a starting reference only. Test results must be recorded before approval or locking can be considered.
+            Use filtered records as starting references only. Test results must be recorded before approval or locking can be considered.
           </p>
         </div>
         <button type="button">Create Test Coupon</button>
