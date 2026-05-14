@@ -1,0 +1,44 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V4",
+  "milestone": "V4-M6 — Baseline Library Filter / Lookup Shell",
+  "purpose": "Add a controlled filter / lookup shell for the Baseline Reference view so floor users can narrow starting-reference records by process, wire size, and record type without creating recommendation or ranking behavior.",
+  "scope_rules": {
+    "app_facing_lookup_filter_shell_only": true,
+    "material_scope": "Mild steel only",
+    "miller_section": "Miller 352 MPa machine baseline section",
+    "vectis_section": "Vectis motion/weave guardrail section",
+    "required_control_language": "Starting Reference — Verify With Test Weld",
+    "numeric_value_creation_allowed": false,
+    "scoring_allowed": false,
+    "ranking_allowed": false,
+    "best_match_allowed": false,
+    "auto_selecting_allowed": false,
+    "approval_action_allowed": false,
+    "lock_action_allowed": false,
+    "recommendation_language_allowed": false
+  },
+  "supported_filters": {
+    "process": ["All", "MIG/CV", "Pulse MIG"],
+    "wire_size": ["All", ".035 ER70S-6", ".045 ER70S-6"],
+    "record_type": ["All", "Miller Machine Baseline", "Vectis Motion / Weave Guardrail"],
+    "value_status": ["All", "missing_unverified", "source_pending", "source_verified", "shop_corrected_starting_point"]
+  },
+  "required_behavior": {
+    "filters_may_narrow_display": true,
+    "filters_must_not_recommend_setting": true,
+    "filters_must_not_rank_records": true,
+    "empty_missing_values_remain_visible_controlled": true,
+    "records_continue_showing_starting_reference_verify_test_weld": true,
+    "miller_records_remain_separate_from_vectis_records": true
+  },
+  "lookup_boundary": {
+    "invent_miller_numeric_values_allowed": false,
+    "invent_vectis_numeric_values_allowed": false,
+    "approved_locked_proven_ideal_best_labels_allowed": false,
+    "production_ready_claims_allowed": false,
+    "recommendation_logic_allowed": false,
+    "ranking_logic_allowed": false
+  }
+}
