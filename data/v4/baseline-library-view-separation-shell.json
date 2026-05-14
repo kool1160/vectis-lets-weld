@@ -1,0 +1,86 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V4",
+  "milestone": "V4-M5 — Baseline Library View Separation Shell",
+  "purpose": "Create an app-facing baseline library view structure that keeps Miller machine baseline references separate from Vectis motion/weave guardrails.",
+  "scope_rules": {
+    "display_view_structure_only": true,
+    "material_scope": "Mild steel only",
+    "miller_section": "Miller 352 MPa machine baseline section",
+    "vectis_section": "Vectis motion/weave guardrail section",
+    "process_compatibility": ["MIG/CV", "Pulse MIG"],
+    "wire_compatibility": [".035 ER70S-6", ".045 ER70S-6"],
+    "required_control_language": "Starting Reference — Verify With Test Weld",
+    "numeric_value_creation_allowed": false,
+    "locked_recipe_creation_allowed": false,
+    "approval_action_allowed": false,
+    "recommendation_logic_allowed": false,
+    "ranking_allowed": false,
+    "auto_selecting_allowed": false,
+    "auto_approval_allowed": false,
+    "auto_locking_allowed": false
+  },
+  "view_sections": {
+    "miller_machine_baseline_references": {
+      "purpose": "Machine-side arc setup references only",
+      "visible_fields": [
+        "baseline_library_id",
+        "source_type",
+        "source_name",
+        "source_evidence_file",
+        "value_status",
+        "confidence_level",
+        "requires_test_weld",
+        "approval_status",
+        "production_ready",
+        "locked_recipe_id"
+      ],
+      "required_labels": [
+        "Machine-Side Arc Reference",
+        "Starting Reference",
+        "Verify With Test Weld",
+        "Not Approved",
+        "Not Production Ready",
+        "Not Locked Recipe"
+      ]
+    },
+    "vectis_motion_weave_guardrails": {
+      "purpose": "Cobot-side motion/weave references only",
+      "visible_fields": [
+        "guardrail_id",
+        "source_type",
+        "weave_pattern_type",
+        "weave_pattern_status",
+        "travel_mode_status",
+        "value_status",
+        "confidence_level",
+        "requires_test_weld",
+        "approval_status",
+        "production_ready",
+        "locked_recipe_id"
+      ],
+      "required_labels": [
+        "Cobot Motion / Weave Guardrail",
+        "Starting Reference",
+        "Verify With Test Weld",
+        "Not Approved",
+        "Not Production Ready",
+        "Not Locked Recipe"
+      ]
+    },
+    "control_notice": {
+      "display_text": "Starting Reference — Verify With Test Weld",
+      "explanation": "These records are not approved production recipes. Miller arc references and Vectis motion/weave guardrails must be tested before approval or locking can be considered."
+    }
+  },
+  "separation_rules": {
+    "miller_and_vectis_visually_separate": true,
+    "miller_and_vectis_structurally_separate": true,
+    "combine_miller_arc_values_with_vectis_motion_values_allowed": false,
+    "invent_numeric_miller_values_allowed": false,
+    "invent_numeric_vectis_values_allowed": false,
+    "approved_locked_proven_ideal_best_labels_allowed": false,
+    "production_ready_claims_allowed": false
+  }
+}
