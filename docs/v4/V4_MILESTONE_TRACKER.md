@@ -33,7 +33,7 @@ Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe
 | V4-M4 | Vectis Motion / Weave Guardrail Shell | CREATED |
 | V4-M5 | Baseline Library View Separation Shell | CREATED |
 | V4-M6 | Baseline Library Filter / Lookup Shell | CREATED |
-| V4-M7 | V4 Data-Control QA Review | NOT STARTED |
+| V4-M7 | Baseline Reference Selection / Trial Handoff Shell | CREATED / APP WIRING PENDING |
 | V4-M8 | Mobile / Tablet Baseline Library QA | NOT STARTED |
 | V4-M9 | V4 Source Validation / Citation Review | NOT STARTED |
 | V4-M10 | V4 Closeout / Source of Truth | NOT STARTED |
