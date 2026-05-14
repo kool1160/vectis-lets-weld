@@ -40,7 +40,7 @@ Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe
 | V3-M3 | Baseline Reference Screen Behavior | CREATED |
 | V3-M4 | Trial Result Entry Behavior | CREATED |
 | V3-M5 | Local History Save / Review Behavior | CREATED |
-| V3-M6 | What Worked Review Behavior | NOT STARTED |
+| V3-M6 | What Worked Review Behavior | CREATED |
 | V3-M7 | Approval / Locked Gate Display | NOT STARTED |
 | V3-M8 | Mobile / Tablet Floor-Side QA | NOT STARTED |
 | V3-M9 | V3 Data-Control QA Review | NOT STARTED |
