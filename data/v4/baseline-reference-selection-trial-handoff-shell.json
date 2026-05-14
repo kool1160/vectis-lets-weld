@@ -1,0 +1,71 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V4",
+  "milestone": "V4-M7 — Baseline Reference Selection / Trial Handoff Shell",
+  "purpose": "Create a controlled handoff path from a selected Baseline Reference record into Trial Result Entry without creating recommendation, ranking, approval, or locked recipe behavior.",
+  "scope_rules": {
+    "app_facing_shell_only": true,
+    "manual_user_selection_only": true,
+    "material_scope": "Mild steel only",
+    "miller_machine_baseline_references_supported": true,
+    "vectis_motion_weave_guardrail_references_supported": true,
+    "process_compatibility": ["MIG/CV", "Pulse MIG"],
+    "wire_compatibility": [".035 ER70S-6", ".045 ER70S-6"],
+    "required_control_language": "Starting Reference — Verify With Test Weld",
+    "trial_result_linkage_only": true,
+    "auto_selecting_allowed": false,
+    "recommended_setting_output_allowed": false,
+    "ranking_allowed": false,
+    "scoring_allowed": false,
+    "approval_allowed": false,
+    "locking_allowed": false
+  },
+  "required_behavior": {
+    "user_can_manually_select_displayed_starting_reference": true,
+    "selected_record_identity_can_carry_into_trial_result_entry": true,
+    "trial_result_entry_shows_reference_not_approved": true,
+    "trial_result_entry_preserves_requires_test_weld_true": true,
+    "trial_records_should_link_to_selected_baseline_reference_id_when_possible": true,
+    "manual_trial_entry_allowed_when_no_reference_selected": true,
+    "miller_and_vectis_references_remain_separated": true
+  },
+  "selected_reference_payload": {
+    "selected_reference_id": null,
+    "selected_reference_type": null,
+    "selected_reference_title": null,
+    "selected_reference_process": null,
+    "selected_reference_wire_size": null,
+    "selected_reference_value_status": null,
+    "selected_reference_control_label": "Starting Reference — Verify With Test Weld",
+    "selected_reference_approval_status": "not_approved",
+    "selected_reference_requires_test_weld": true,
+    "selected_reference_locked_recipe_id": null
+  },
+  "trial_handoff_fields": [
+    "selected_reference_id",
+    "selected_reference_type",
+    "baseline_range_id",
+    "test_coupon_id",
+    "traceable_identifier_type",
+    "traceable_identifier_value",
+    "requires_test_weld",
+    "approval_status",
+    "locked_recipe_id"
+  ],
+  "required_display_language": [
+    "Starting Reference — Verify With Test Weld",
+    "Not an approved production recipe"
+  ],
+  "control_rules": {
+    "invent_miller_or_vectis_numeric_values_allowed": false,
+    "recommend_record_allowed": false,
+    "rank_records_allowed": false,
+    "best_match_behavior_allowed": false,
+    "approved_locked_proven_ideal_best_labels_allowed": false,
+    "production_ready_claims_allowed": false,
+    "auto_approval_allowed": false,
+    "auto_locking_allowed": false,
+    "miller_machine_settings_separate_from_vectis_motion_weave_guardrails": true
+  }
+}
