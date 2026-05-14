@@ -157,6 +157,12 @@ function fieldKey(field: string) {
   return field.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 }
 
+function isPassedTrial(record: TrialRecord) {
+  const passFail = record.pass_fail.toLowerCase();
+  const status = record.test_status.toLowerCase();
+  return passFail.includes('pass') || status.includes('pass');
+}
+
 function FieldGrid({ fields, prefix = '' }: { fields: string[]; prefix?: string }) {
   return (
     <div className="field-grid">
@@ -172,6 +178,31 @@ function FieldGrid({ fields, prefix = '' }: { fields: string[]; prefix?: string 
         </label>
       ))}
     </div>
+  );
+}
+
+function TrialHistoryCard({ record }: { record: TrialRecord }) {
+  return (
+    <article className="history-card">
+      <div>
+        <strong>{record.test_coupon_id || 'No test coupon ID entered'}</strong>
+        <span>{record.date || 'No date entered'} · {record.operator || 'No operator entered'}</span>
+      </div>
+      <div className="history-meta">
+        <span>{record.material || 'Mild steel'}</span>
+        <span>{record.thickness || 'Thickness not entered'}</span>
+        <span>{record.joint_type || 'Joint not entered'}</span>
+        <span>{record.mode || 'Mode not entered'}</span>
+        <span>{record.wire_diameter || 'Wire not entered'}</span>
+      </div>
+      <p>{record.result_notes || 'No result notes entered.'}</p>
+      <div className="reference-summary compact">
+        <span>{record.test_status || 'Test status not entered'}</span>
+        <span>{record.pass_fail || 'Pass/fail not entered'}</span>
+        <span>Evidence Only</span>
+        <span>Not Approved</span>
+      </div>
+    </article>
   );
 }
 
@@ -376,26 +407,62 @@ function LocalHistoryScreen({ records }: { records: TrialRecord[] }) {
         ) : (
           <div className="history-list">
             {records.map((record) => (
-              <article className="history-card" key={record.id}>
-                <div>
-                  <strong>{record.test_coupon_id || 'No test coupon ID entered'}</strong>
-                  <span>{record.date || 'No date entered'} · {record.operator || 'No operator entered'}</span>
-                </div>
-                <div className="history-meta">
-                  <span>{record.material || 'Mild steel'}</span>
-                  <span>{record.thickness || 'Thickness not entered'}</span>
-                  <span>{record.joint_type || 'Joint not entered'}</span>
-                  <span>{record.mode || 'Mode not entered'}</span>
-                  <span>{record.wire_diameter || 'Wire not entered'}</span>
-                </div>
-                <p>{record.result_notes || 'No result notes entered.'}</p>
-                <div className="reference-summary compact">
-                  <span>{record.test_status || 'Test status not entered'}</span>
-                  <span>{record.pass_fail || 'Pass/fail not entered'}</span>
-                  <span>Evidence Only</span>
-                  <span>Not Approved</span>
-                </div>
-              </article>
+              <TrialHistoryCard key={record.id} record={record} />
+            ))}
+          </div>
+        )}
+      </article>
+    </section>
+  );
+}
+
+function WhatWorkedScreen({ records }: { records: TrialRecord[] }) {
+  const passedRecords = records.filter(isPassedTrial);
+  const failedRecords = records.filter((record) => !isPassedTrial(record));
+
+  return (
+    <section className="helper-grid">
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">What Worked Review</p>
+          <h2>Passed Trial Evidence</h2>
+          <p className="panel-note">
+            “Worked” means passed trial evidence only. It does not mean approved, locked, ranked, recommended, or production-ready.
+          </p>
+        </div>
+        <div className="reference-summary">
+          <span>Tested Result</span>
+          <span>Evidence Only</span>
+          <span>Not Approved</span>
+          <span>Not Locked Recipe</span>
+        </div>
+        {passedRecords.length === 0 ? (
+          <div className="empty-state">
+            No saved passed trials yet. Save a trial with a pass result to review it here as evidence.
+          </div>
+        ) : (
+          <div className="history-list">
+            {passedRecords.map((record) => (
+              <TrialHistoryCard key={record.id} record={record} />
+            ))}
+          </div>
+        )}
+      </article>
+
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Failed / Needs Review</p>
+          <h2>Failed or Unclear Trial Evidence</h2>
+          <p className="panel-note">
+            Failed and unclear trials stay visible for learning. They are not hidden, ranked, or converted into recommendations.
+          </p>
+        </div>
+        {failedRecords.length === 0 ? (
+          <div className="empty-state">No failed or unclear saved trials to review.</div>
+        ) : (
+          <div className="history-list">
+            {failedRecords.map((record) => (
+              <TrialHistoryCard key={record.id} record={record} />
             ))}
           </div>
         )}
@@ -510,15 +577,7 @@ function App() {
 
       {activeScreen === 'history' && <LocalHistoryScreen records={trialRecords} />}
 
-      {activeScreen === 'worked' && (
-        <section className="helper-grid">
-          <PlaceholderPanel
-            title="What Worked Review"
-            copy="Review tested results that worked without ranking, recommending, or calling them production-ready unless they pass approval and lock authorization."
-            action="Review Tested Results"
-          />
-        </section>
-      )}
+      {activeScreen === 'worked' && <WhatWorkedScreen records={trialRecords} />}
 
       {activeScreen === 'gate' && (
         <section className="helper-grid">
