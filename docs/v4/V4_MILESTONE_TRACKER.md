@@ -31,7 +31,7 @@ Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe
 | V4-M2 | Miller Machine Baseline Starter Rows | CREATED |
 | V4-M3 | Miller Baseline Source Intake Fields | CREATED |
 | V4-M4 | Vectis Motion / Weave Guardrail Shell | CREATED |
-| V4-M5 | User Correction / Justification Model | NOT STARTED |
+| V4-M5 | Baseline Library View Separation Shell | CREATED |
 | V4-M6 | Baseline To Trial Workflow Link | NOT STARTED |
 | V4-M7 | V4 Data-Control QA Review | NOT STARTED |
 | V4-M8 | Mobile / Tablet Baseline Library QA | NOT STARTED |
@@ -40,6 +40,8 @@ Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe
 
 ## Replaced Direction
 The original V4-M3 Vectis Weave / Motion Guardrail Rows item was replaced by Miller Baseline Source Intake Fields to protect against unsupported Miller numeric values entering the library without source evidence. Vectis motion/weave guardrail structure was then added safely as V4-M4.
+
+The original V4-M5 User Correction / Justification Model item was moved later so V4-M5 could establish the baseline library view separation shell before correction behavior is added.
 
 ## V4 Guardrail
 V4 must not create locked recipes, approved baseline rows, recommendation logic, ranking, best/ideal/proven claims, auto-approval, or production-ready baseline claims.
