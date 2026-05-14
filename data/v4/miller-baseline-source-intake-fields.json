@@ -1,0 +1,76 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V4",
+  "milestone": "V4-M3 — Miller Baseline Source Intake Fields",
+  "purpose": "Add a controlled source-intake structure for adding verified Miller 352 MPa baseline values later without creating fake or unsupported weld settings.",
+  "scope_rules": {
+    "material_scope": "Mild steel only",
+    "welder_scope": "Miller 352 MPa only",
+    "machine_side_arc_baseline_only": true,
+    "allowed_processes": ["MIG/CV", "Pulse MIG"],
+    "allowed_wire": [".035 ER70S-6", ".045 ER70S-6"],
+    "source_tracking_only": true,
+    "evidence_tracking_only": true,
+    "numeric_setting_population_allowed": false,
+    "vectis_weave_motion_guardrails_allowed": false,
+    "recommendation_logic_allowed": false,
+    "ranking_allowed": false,
+    "auto_selecting_allowed": false,
+    "auto_approval_allowed": false,
+    "auto_locking_allowed": false
+  },
+  "required_source_intake_fields": [
+    "source_type",
+    "source_name",
+    "source_reference",
+    "source_date",
+    "source_capture_method",
+    "source_evidence_file",
+    "verified_by",
+    "verification_date",
+    "verification_notes",
+    "value_status",
+    "missing_value_reason",
+    "requires_test_weld",
+    "correction_requires_justification"
+  ],
+  "allowed_source_types": [
+    "MILLER_MACHINE_REFERENCE",
+    "TRUSTED_PUBLIC_REFERENCE",
+    "SHOP_SCREENSHOT_REFERENCE",
+    "SHOP_CORRECTED_STARTING_POINT"
+  ],
+  "allowed_source_capture_methods": [
+    "manual_entry_from_miller_machine",
+    "manual_entry_from_miller_document",
+    "shop_screenshot",
+    "trusted_public_reference",
+    "shop_corrected_starting_point"
+  ],
+  "allowed_value_statuses": [
+    "missing_unverified",
+    "captured_pending_verification",
+    "verified_starting_reference",
+    "rejected_source",
+    "superseded_reference"
+  ],
+  "required_defaults": {
+    "value_status": "missing_unverified",
+    "requires_test_weld": true,
+    "correction_requires_justification": true,
+    "confidence_level": "STARTING_REFERENCE",
+    "approval_status": "not_approved",
+    "production_ready": false,
+    "locked_recipe_id": null
+  },
+  "intake_rules": {
+    "invent_miller_numeric_values_allowed": false,
+    "scrape_or_guess_weld_settings_allowed": false,
+    "approved_locked_proven_ideal_best_labels_allowed": false,
+    "production_ready_claims_allowed": false,
+    "all_records_label": "Starting Reference — Verify With Test Weld",
+    "miller_vectis_separation": "Miller machine baseline source intake remains separate from Vectis weave/motion guardrails."
+  },
+  "source_intake_records": []
+}
