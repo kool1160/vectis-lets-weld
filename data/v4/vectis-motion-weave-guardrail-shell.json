@@ -1,0 +1,140 @@
+{
+  "project": "Vectis lets weld",
+  "app": "AI-Weld Settings Library / Vectis Weld Recipe Control",
+  "version": "V4",
+  "milestone": "V4-M4 — Vectis Motion / Weave Guardrail Shell",
+  "purpose": "Create a controlled Vectis-side motion and weave guardrail structure that stays separate from Miller machine baseline settings.",
+  "scope_rules": {
+    "vectis_cobot_side_only": true,
+    "material_scope": "Mild steel only",
+    "motion_weave_travel_setup_structure_only": true,
+    "process_compatibility": ["MIG/CV", "Pulse MIG"],
+    "wire_compatibility": [".035 ER70S-6", ".045 ER70S-6"],
+    "guardrail_shell_only": true,
+    "numeric_motion_values_allowed": false,
+    "miller_machine_setting_rows_allowed": false,
+    "locked_recipes_allowed": false,
+    "recommendation_logic_allowed": false,
+    "ranking_allowed": false,
+    "auto_selecting_allowed": false,
+    "auto_approval_allowed": false,
+    "auto_locking_allowed": false
+  },
+  "required_defaults": {
+    "source_type": "VECTIS_MANUAL_GUARDRAIL",
+    "confidence_level": "STARTING_REFERENCE",
+    "requires_test_weld": true,
+    "approval_status": "not_approved",
+    "production_ready": false,
+    "locked_recipe_id": null,
+    "value_status": "missing_unverified"
+  },
+  "field_groups": {
+    "vectis_setup_identity": [
+      "guardrail_id",
+      "guardrail_name",
+      "vectis_program_context",
+      "operation_context",
+      "notes"
+    ],
+    "process_compatibility": [
+      "compatible_processes",
+      "mode_notes"
+    ],
+    "wire_compatibility": [
+      "compatible_wire_type",
+      "compatible_wire_diameters",
+      "wire_notes"
+    ],
+    "joint_weld_type_compatibility": [
+      "compatible_joint_types",
+      "compatible_weld_positions",
+      "compatible_weld_sizes",
+      "joint_notes"
+    ],
+    "travel_mode": [
+      "travel_mode_type",
+      "travel_mode_status",
+      "travel_speed_status",
+      "travel_speed_reference",
+      "travel_notes"
+    ],
+    "torch_angle_notes": [
+      "torch_angle_notes",
+      "work_angle_notes",
+      "push_pull_angle_notes"
+    ],
+    "stickout_contact_tip_notes": [
+      "stickout_notes",
+      "contact_tip_notes",
+      "ctwd_notes"
+    ],
+    "weave_pattern_type": [
+      "weave_pattern_type",
+      "weave_pattern_status",
+      "weave_pattern_notes"
+    ],
+    "weave_width_status": [
+      "weave_width_status",
+      "weave_width_reference",
+      "weave_width_notes"
+    ],
+    "weave_frequency_status": [
+      "weave_frequency_status",
+      "weave_frequency_reference",
+      "weave_frequency_notes"
+    ],
+    "motion_notes": [
+      "motion_notes",
+      "robot_stability_notes",
+      "programming_caution_notes"
+    ],
+    "source_evidence_tracking": [
+      "source_type",
+      "source_name",
+      "source_reference",
+      "source_date",
+      "source_capture_method",
+      "source_evidence_file",
+      "verified_by",
+      "verification_date",
+      "verification_notes",
+      "value_status",
+      "missing_value_reason"
+    ],
+    "test_weld_requirement": [
+      "requires_test_weld",
+      "test_coupon_id",
+      "test_result_id"
+    ],
+    "approval_lock_control": [
+      "approval_status",
+      "production_ready",
+      "locked_recipe_id",
+      "confidence_level"
+    ]
+  },
+  "allowed_weave_pattern_types": [
+    "No Weave",
+    "Zig-Zag",
+    "Sine",
+    "InLine",
+    "Other / Shop Defined"
+  ],
+  "allowed_value_statuses": [
+    "missing_unverified",
+    "captured_pending_verification",
+    "verified_starting_reference",
+    "rejected_source",
+    "superseded_reference"
+  ],
+  "guardrail_rules": {
+    "miller_machine_settings_separate": true,
+    "invent_vectis_motion_numbers_allowed": false,
+    "approved_locked_proven_ideal_best_labels_allowed": false,
+    "production_ready_claims_allowed": false,
+    "required_control_label": "Starting Reference — Verify With Test Weld",
+    "rule": "Vectis motion/weave guardrails are setup references only and must remain separate from Miller machine-side arc baseline settings."
+  },
+  "guardrail_records": []
+}
