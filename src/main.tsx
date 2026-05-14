@@ -137,29 +137,24 @@ const setupInputFields = [
   'Traceable ID Value',
 ];
 
-const baselineReferenceRows = [
-  ['material', 'Mild steel'],
-  ['thickness', 'Reference placeholder'],
-  ['gauge', 'Reference placeholder'],
-  ['joint_type', 'Reference placeholder'],
-  ['weld_position', 'Reference placeholder'],
-  ['wire_type', 'ER70S-6'],
-  ['wire_diameter', '.035 / .045 ER70S-6 only'],
-  ['gas', 'Shop-used mild steel gas only'],
-  ['mode', 'MIG/CV or Pulse MIG'],
-  ['wfs_low', 'Reference only'],
-  ['wfs_high', 'Reference only'],
-  ['voltage_low', 'Reference only'],
-  ['voltage_high', 'Reference only'],
-  ['trim_or_arc_length_low', 'Reference only'],
-  ['trim_or_arc_length_high', 'Reference only'],
-  ['travel_speed_low', 'Reference only'],
-  ['travel_speed_high', 'Reference only'],
-  ['weave_type', 'Reference only'],
-  ['source_label', 'SHOP_REFERENCE / MILLER_MACHINE_REFERENCE / VECTIS_MANUAL_GUARDRAIL'],
-  ['confidence_level', 'REFERENCE_ONLY'],
-  ['baseline_status', 'REFERENCE_ONLY'],
-  ['requiresTestCoupon', 'true'],
+const millerLibraryRows = [
+  ['Section', 'Miller Machine Baseline References'],
+  ['Scope', 'Machine-side arc setup references only'],
+  ['Source / Evidence Status', 'Required before numeric values are entered'],
+  ['Value Status', 'missing_unverified / verified_starting_reference'],
+  ['Test Weld Required', 'true'],
+  ['Control', 'Starting Reference — Verify With Test Weld'],
+  ['Status', 'Not Approved / Not Production Ready / Not Locked Recipe'],
+];
+
+const vectisGuardrailRows = [
+  ['Section', 'Vectis Motion / Weave Guardrails'],
+  ['Scope', 'Cobot-side motion/weave references only'],
+  ['Weave Pattern Type', 'No Weave / Zig-Zag / Sine / InLine / Other'],
+  ['Motion Value Status', 'missing_unverified / verified_starting_reference'],
+  ['Test Weld Required', 'true'],
+  ['Control', 'Starting Reference — Verify With Test Weld'],
+  ['Status', 'Not Approved / Not Production Ready / Not Locked Recipe'],
 ];
 
 function fieldKey(field: string) {
@@ -215,6 +210,19 @@ function TrialHistoryCard({ record }: { record: TrialRecord }) {
   );
 }
 
+function ReferenceTable({ rows }: { rows: string[][] }) {
+  return (
+    <div className="reference-table" aria-label="Baseline library separated reference fields">
+      {rows.map(([label, value]) => (
+        <div className="reference-row" key={label}>
+          <strong>{label}</strong>
+          <span>{value}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function SetupEntryControls() {
   return (
     <div className="field-grid">
@@ -251,36 +259,45 @@ function BaselineReferenceScreen() {
     <section className="helper-grid">
       <article className="panel wide">
         <div className="panel-heading">
-          <p className="section-kicker">Baseline Reference</p>
-          <h2>Reference-Only Baseline Guidance</h2>
+          <p className="section-kicker">Baseline Library</p>
+          <h2>Starting Reference — Verify With Test Weld</h2>
           <p className="panel-note">
-            Baseline values are starting references only. They are not approved, locked, ranked, recommended, proven, or production-ready.
+            Miller machine arc references and Vectis motion/weave guardrails are separated on purpose. These are not approved production recipes.
           </p>
         </div>
-
         <div className="reference-summary">
           <span>Mild steel only</span>
-          <span>Vectis cobot</span>
-          <span>Miller 352 MPa</span>
-          <span>Requires Test Coupon</span>
+          <span>MIG/CV + Pulse MIG</span>
+          <span>.035 / .045 ER70S-6</span>
+          <span>Not Approved</span>
+          <span>Not Locked Recipe</span>
         </div>
+      </article>
 
-        <div className="reference-table" aria-label="Baseline reference fields">
-          {baselineReferenceRows.map(([label, value]) => (
-            <div className="reference-row" key={label}>
-              <strong>{label}</strong>
-              <span>{value}</span>
-            </div>
-          ))}
+      <article className="panel">
+        <div className="panel-heading">
+          <p className="section-kicker">Miller 352 MPa</p>
+          <h2>Machine Baseline References</h2>
+          <p className="panel-note">Machine-side arc setup references only. Source, evidence, value status, and test weld requirement stay visible.</p>
         </div>
+        <ReferenceTable rows={millerLibraryRows} />
+      </article>
+
+      <article className="panel">
+        <div className="panel-heading">
+          <p className="section-kicker">Vectis Cobot</p>
+          <h2>Motion / Weave Guardrails</h2>
+          <p className="panel-note">Cobot-side travel, motion, weave, and setup guardrails only. These do not replace Miller machine arc settings.</p>
+        </div>
+        <ReferenceTable rows={vectisGuardrailRows} />
       </article>
 
       <article className="panel wide review-panel">
         <div>
-          <p className="section-kicker">Next Safe Step</p>
-          <h2>Create Test Coupon / Trial Weld</h2>
+          <p className="section-kicker">Control Notice</p>
+          <h2>Starting Reference — Verify With Test Weld</h2>
           <p>
-            Use baseline guidance to start a test coupon or trial weld only. Tested results must be recorded before approval or locking can be considered.
+            Use these lanes to find a starting reference only. Test results must be recorded before approval or locking can be considered.
           </p>
         </div>
         <button type="button">Create Test Coupon</button>
