@@ -23,6 +23,11 @@ type TrialRecord = {
   pass_fail: string;
   test_status: string;
   result_notes: string;
+  selected_baseline_reference_id?: string;
+  selected_baseline_reference_type?: string;
+  selected_baseline_reference_process?: string;
+  selected_baseline_reference_wire_size?: string;
+  selected_baseline_reference_value_status?: string;
   created_at: string;
 };
 
@@ -262,6 +267,14 @@ function TrialHistoryCard({ record }: { record: TrialRecord }) {
         <span>{record.mode || 'Mode not entered'}</span>
         <span>{record.wire_diameter || 'Wire not entered'}</span>
       </div>
+      {record.selected_baseline_reference_id && (
+        <div className="reference-summary compact">
+          <span>Selected Reference: {record.selected_baseline_reference_id}</span>
+          <span>{record.selected_baseline_reference_type}</span>
+          <span>{record.selected_baseline_reference_process}</span>
+          <span>{record.selected_baseline_reference_wire_size}</span>
+        </div>
+      )}
       <p>{record.result_notes || 'No result notes entered.'}</p>
       <div className="reference-summary compact">
         <span>{record.test_status || 'Test status not entered'}</span>
@@ -286,7 +299,17 @@ function ReferenceTable({ rows }: { rows: string[][] }) {
   );
 }
 
-function LookupRecordCard({ record }: { record: BaselineLookupRecord }) {
+function LookupRecordCard({
+  record,
+  selectedReferenceId,
+  onSelectReference,
+}: {
+  record: BaselineLookupRecord;
+  selectedReferenceId?: string;
+  onSelectReference?: (record: BaselineLookupRecord) => void;
+}) {
+  const isSelected = selectedReferenceId === record.id;
+
   return (
     <article className="history-card">
       <div>
@@ -301,6 +324,15 @@ function LookupRecordCard({ record }: { record: BaselineLookupRecord }) {
       </div>
       <p>{record.primary_status}</p>
       <ReferenceTable rows={record.detail_rows} />
+      {onSelectReference && (
+        <div className="reference-summary compact">
+          <span>{isSelected ? 'Selected for Trial Entry' : 'Manual Selection Only'}</span>
+          <span>Not an approved production recipe</span>
+          <button type="button" onClick={() => onSelectReference(record)}>
+            Use This Starting Reference
+          </button>
+        </div>
+      )}
     </article>
   );
 }
@@ -336,7 +368,13 @@ function SetupEntryControls() {
   );
 }
 
-function BaselineReferenceScreen() {
+function BaselineReferenceScreen({
+  selectedReference,
+  onSelectReference,
+}: {
+  selectedReference: BaselineLookupRecord | null;
+  onSelectReference: (record: BaselineLookupRecord) => void;
+}) {
   const [processFilter, setProcessFilter] = useState('All');
   const [wireFilter, setWireFilter] = useState('All');
   const [recordTypeFilter, setRecordTypeFilter] = useState('All');
@@ -373,6 +411,22 @@ function BaselineReferenceScreen() {
           <span>Not Approved</span>
           <span>Not Locked Recipe</span>
         </div>
+        {selectedReference && (
+          <div className="reference-table" aria-label="Selected starting reference">
+            <div className="reference-row">
+              <strong>Selected Starting Reference</strong>
+              <span>{selectedReference.id}</span>
+            </div>
+            <div className="reference-row">
+              <strong>Record Type</strong>
+              <span>{selectedReference.record_type}</span>
+            </div>
+            <div className="reference-row">
+              <strong>Trial Control</strong>
+              <span>Starting Reference — Verify With Test Weld / Not an approved production recipe</span>
+            </div>
+          </div>
+        )}
       </article>
 
       <article className="panel wide">
@@ -426,7 +480,7 @@ function BaselineReferenceScreen() {
           <p className="panel-note">Machine-side arc setup references only. Source, evidence, value status, and test weld requirement stay visible.</p>
         </div>
         <div className="history-list">
-          {millerRecords.length === 0 ? <div className="empty-state">No Miller machine baseline references match the current filters.</div> : millerRecords.map((record) => <LookupRecordCard key={record.id} record={record} />)}
+          {millerRecords.length === 0 ? <div className="empty-state">No Miller machine baseline references match the current filters.</div> : millerRecords.map((record) => <LookupRecordCard key={record.id} record={record} selectedReferenceId={selectedReference?.id} onSelectReference={onSelectReference} />)}
         </div>
       </article>
 
@@ -437,7 +491,7 @@ function BaselineReferenceScreen() {
           <p className="panel-note">Cobot-side travel, motion, weave, and setup guardrails only. These do not replace Miller machine arc settings.</p>
         </div>
         <div className="history-list">
-          {vectisRecords.length === 0 ? <div className="empty-state">No Vectis motion/weave guardrails match the current filters.</div> : vectisRecords.map((record) => <LookupRecordCard key={record.id} record={record} />)}
+          {vectisRecords.length === 0 ? <div className="empty-state">No Vectis motion/weave guardrails match the current filters.</div> : vectisRecords.map((record) => <LookupRecordCard key={record.id} record={record} selectedReferenceId={selectedReference?.id} onSelectReference={onSelectReference} />)}
         </div>
       </article>
 
@@ -455,7 +509,13 @@ function BaselineReferenceScreen() {
   );
 }
 
-function TrialResultScreen({ onSave }: { onSave: (record: TrialRecord) => void }) {
+function TrialResultScreen({
+  selectedReference,
+  onSave,
+}: {
+  selectedReference: BaselineLookupRecord | null;
+  onSave: (record: TrialRecord) => void;
+}) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -482,6 +542,11 @@ function TrialResultScreen({ onSave }: { onSave: (record: TrialRecord) => void }
       pass_fail: read('result_pass_fail'),
       test_status: read('result_test_status'),
       result_notes: read('result_result_notes'),
+      selected_baseline_reference_id: selectedReference?.id,
+      selected_baseline_reference_type: selectedReference?.record_type,
+      selected_baseline_reference_process: selectedReference?.process,
+      selected_baseline_reference_wire_size: selectedReference?.wire_size,
+      selected_baseline_reference_value_status: selectedReference?.value_status,
       created_at: new Date().toISOString(),
     });
   }
@@ -500,7 +565,37 @@ function TrialResultScreen({ onSave }: { onSave: (record: TrialRecord) => void }
           {trialSafetyLabels.map((label) => (
             <span key={label}>{label}</span>
           ))}
+          <span>Starting Reference — Verify With Test Weld</span>
+          <span>Not an approved production recipe</span>
         </div>
+        {selectedReference ? (
+          <div className="reference-table" aria-label="Selected starting reference trial context">
+            <div className="reference-row">
+              <strong>Selected Reference ID</strong>
+              <span>{selectedReference.id}</span>
+            </div>
+            <div className="reference-row">
+              <strong>Record Type</strong>
+              <span>{selectedReference.record_type}</span>
+            </div>
+            <div className="reference-row">
+              <strong>Process / Wire</strong>
+              <span>{selectedReference.process} / {selectedReference.wire_size}</span>
+            </div>
+            <div className="reference-row">
+              <strong>Value Status</strong>
+              <span>{selectedReference.value_status}</span>
+            </div>
+            <div className="reference-row">
+              <strong>Approval Status</strong>
+              <span>Not Approved / Not Production Ready / Not Locked Recipe</span>
+            </div>
+          </div>
+        ) : (
+          <div className="empty-state">
+            No starting reference selected. Manual trial entry is still allowed.
+          </div>
+        )}
         <FieldGrid fields={trialIdFields} prefix="trial_" />
       </article>
 
@@ -719,6 +814,7 @@ function PlaceholderPanel({ title, copy, action }: { title: string; copy: string
 function App() {
   const [activeScreen, setActiveScreen] = useState('home');
   const [trialRecords, setTrialRecords] = useState<TrialRecord[]>([]);
+  const [selectedReference, setSelectedReference] = useState<BaselineLookupRecord | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem(historyStorageKey);
@@ -726,6 +822,11 @@ function App() {
       setTrialRecords(JSON.parse(saved) as TrialRecord[]);
     }
   }, []);
+
+  function selectStartingReference(record: BaselineLookupRecord) {
+    setSelectedReference(record);
+    setActiveScreen('trial');
+  }
 
   function saveTrialRecord(record: TrialRecord) {
     const nextRecords = [record, ...trialRecords];
@@ -803,9 +904,9 @@ function App() {
         </section>
       )}
 
-      {activeScreen === 'baseline' && <BaselineReferenceScreen />}
+      {activeScreen === 'baseline' && <BaselineReferenceScreen selectedReference={selectedReference} onSelectReference={selectStartingReference} />}
 
-      {activeScreen === 'trial' && <TrialResultScreen onSave={saveTrialRecord} />}
+      {activeScreen === 'trial' && <TrialResultScreen selectedReference={selectedReference} onSave={saveTrialRecord} />}
 
       {activeScreen === 'history' && <LocalHistoryScreen records={trialRecords} />}
 
