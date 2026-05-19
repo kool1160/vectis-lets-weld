@@ -379,6 +379,17 @@ function BaselineReferenceScreen({
   const [wireFilter, setWireFilter] = useState('All');
   const [recordTypeFilter, setRecordTypeFilter] = useState('All');
   const [valueStatusFilter, setValueStatusFilter] = useState('All');
+  const [quickThickness, setQuickThickness] = useState('3/8');
+  const [quickProcess, setQuickProcess] = useState<'MIG/CV' | 'Pulse MIG'>('Pulse MIG');
+  const [quickWire, setQuickWire] = useState<'.035 ER70S-6' | '.045 ER70S-6'>('.045 ER70S-6');
+  const [quickJoint, setQuickJoint] = useState('Fillet');
+
+  function applyQuickLookup() {
+    setProcessFilter(quickProcess);
+    setWireFilter(quickWire);
+    setRecordTypeFilter('All');
+    setValueStatusFilter('All');
+  }
 
   const filteredRecords = useMemo(() => {
     return baselineLookupRecords.filter((record) => {
@@ -427,6 +438,75 @@ function BaselineReferenceScreen({
             </div>
           </div>
         )}
+      </article>
+
+      <article className="panel wide">
+        <div className="panel-heading">
+          <p className="section-kicker">Quick Lookup</p>
+          <h2>Find a Starting Reference Fast</h2>
+          <p className="panel-note">
+            Choose the shop context first. This narrows the starting-reference lane only; it does not recommend, rank, approve, or lock settings.
+          </p>
+        </div>
+        <div className="field-grid">
+          <label className="field">
+            <span>Material</span>
+            <select aria-label="Quick Lookup Material" value="Mild steel" disabled>
+              <option>Mild steel</option>
+            </select>
+          </label>
+          <label className="field">
+            <span>Thickness</span>
+            <select value={quickThickness} onChange={(event) => setQuickThickness(event.target.value)} aria-label="Quick Lookup Thickness">
+              <option>1/8</option>
+              <option>3/16</option>
+              <option>1/4</option>
+              <option>3/8</option>
+              <option>1/2</option>
+              <option>Other / manual</option>
+            </select>
+          </label>
+          <label className="field">
+            <span>Process</span>
+            <select value={quickProcess} onChange={(event) => setQuickProcess(event.target.value as 'MIG/CV' | 'Pulse MIG')} aria-label="Quick Lookup Process">
+              <option>MIG/CV</option>
+              <option>Pulse MIG</option>
+            </select>
+          </label>
+          <label className="field">
+            <span>Wire</span>
+            <select value={quickWire} onChange={(event) => setQuickWire(event.target.value as '.035 ER70S-6' | '.045 ER70S-6')} aria-label="Quick Lookup Wire">
+              <option>.035 ER70S-6</option>
+              <option>.045 ER70S-6</option>
+            </select>
+          </label>
+          <label className="field">
+            <span>Joint Type</span>
+            <select value={quickJoint} onChange={(event) => setQuickJoint(event.target.value)} aria-label="Quick Lookup Joint Type">
+              <option>Fillet</option>
+              <option>Butt</option>
+              <option>Lap</option>
+              <option>Other / manual</option>
+            </select>
+          </label>
+        </div>
+        <div className="reference-summary compact">
+          <span>Mild steel</span>
+          <span>{quickThickness}</span>
+          <span>{quickProcess}</span>
+          <span>{quickWire}</span>
+          <span>{quickJoint}</span>
+        </div>
+        <p className="panel-note">
+          No verified numeric baseline values entered yet. Use this as a controlled starting-reference search context only.
+        </p>
+        <div className="reference-summary compact">
+          <span>Starting Reference — Verify With Test Weld</span>
+          <span>Not an approved production recipe</span>
+        </div>
+        <button type="button" onClick={applyQuickLookup}>
+          Show Starting Reference Lane
+        </button>
       </article>
 
       <article className="panel wide">
