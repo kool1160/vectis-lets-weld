@@ -37,6 +37,7 @@ Baseline Range → Test Coupon → Tested Result → Approval → Locked Recipe
 | V4-M7A | Wire Baseline Selection / Trial Handoff Into App Screen | BLOCKED |
 | V4-M7B | Manual Patch / Codex Wire Baseline Selection Into Trial Entry | PATCH PACKAGE CREATED / APP WIRING PENDING |
 | V4-M8 | Mobile / Tablet Baseline Library QA | STATIC QA COMPLETE / DEVICE VERIFICATION NEEDED |
+| V4-M8A | Floor-Side Quick Lookup Path | RUNTIME BLOCKED |
 | V4-M9 | V4 Source Validation / Citation Review | NOT STARTED |
 | V4-M10 | V4 Closeout / Source of Truth | NOT STARTED |
 
